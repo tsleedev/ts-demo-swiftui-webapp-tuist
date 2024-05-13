@@ -3,7 +3,7 @@
 //  FirebaseBridge
 //
 //  Created by TAE SU LEE on 5/7/24.
-//  Copyright © 2024 https://github.com/tsleedev. All rights reserved.
+//  Copyright © 2024 https://github.com/tsleedev/. All rights reserved.
 //
 
 import Foundation

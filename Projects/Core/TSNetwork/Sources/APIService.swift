@@ -3,7 +3,7 @@
 //  Network
 //
 //  Created by TAE SU LEE on 2023/09/16.
-//  Copyright © 2023 https://github.com/tsleedev. All rights reserved.
+//  Copyright © 2023 https://github.com/tsleedev/. All rights reserved.
 //
 
 import Foundation
