@@ -1,6 +1,6 @@
 //
-//  WebAppDemoApp.swift
-//  WebAppDemo
+//  TSWebAppDemoApp.swift
+//  TSWebAppDemo
 //
 //  Created by TAE SU LEE on 5/8/24.
 //  Copyright © 2024 https://github.com/tsleedev. All rights reserved.
@@ -35,7 +35,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 }
 
 @main
-struct WebAppDemoApp: App {
+struct TSWebAppDemoApp: App {
     @Environment(\.scenePhase) private var scenePhase
     
     @ObservedObject private var viewModel: AppViewModel
@@ -43,8 +43,8 @@ struct WebAppDemoApp: App {
     
     init() {
         FBAppConfig.configure()
-        TSCrashlytics.crashlyticsLog(type: .app, log: "WebAppDemoApp_init")
-        TSWebView.applictionNameForUserAgent = "WebAppDemo/\(AppInfo.version)"
+        TSCrashlytics.crashlyticsLog(type: .app, log: "TSWebAppDemoApp_init")
+        TSWebView.applictionNameForUserAgent = "TSWebAppDemo/\(AppInfo.version)"
         
         self.viewModel = AppViewModel(appClient: MockAppClient())
         let url = ViewFactory.createWebStateForLocalHtml()
@@ -80,14 +80,14 @@ struct WebAppDemoApp: App {
             .onOpenURL(perform: { url in
                 Task {
                     let deepLink = await TSDeepLinks().handleUniversalLink(url)
-                    coordinator.deepLink(.webview(.init(url: deepLink, afterCloseScript: nil)))
+//                    coordinator.deepLink(.webView(.init(url: deepLink, afterCloseScript: nil)))
                 }
             })
             .onContinueUserActivity(NSUserActivityTypeBrowsingWeb, perform: { userActivity in
                 Task {
                     guard let url = userActivity.webpageURL else { return }
                     let deepLink = await TSDeepLinks().handleUniversalLink(url)
-                    coordinator.deepLink(.webview(.init(url: deepLink, afterCloseScript: nil)))
+//                    coordinator.deepLink(.webView(.init(url: deepLink, afterCloseScript: nil)))
                 }
             })
             .onChange(of: scenePhase) { newScenePhase in
@@ -110,7 +110,7 @@ struct WebAppDemoApp: App {
 }
 
 // MARK: - Views
-extension WebAppDemoApp {
+extension TSWebAppDemoApp {
     func showAlert() -> Alert {
         let alert = Alert(
             title: Text("알림"),

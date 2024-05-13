@@ -7,7 +7,7 @@
 
 import UIKit
 
-extension UIView {
+public extension UIView {
     // 뷰컨트롤러 찾기
     var viewController: UIViewController? {
         if let vc = self.next as? UIViewController {

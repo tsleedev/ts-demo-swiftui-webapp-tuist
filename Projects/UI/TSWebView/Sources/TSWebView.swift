@@ -17,7 +17,9 @@ public protocol TSWebViewInteractionDelegate: AnyObject {
     func didReceiveMessage(name: String, body: Any)
 }
 
-open class TSWebView: WKWebView, WKScriptMessageHandler {
+open class TSWebView: WKWebView, WKScriptMessageHandler, Identifiable {
+    public let id: String = UUID().uuidString
+    
     public static var applictionNameForUserAgent: String = "TSWebView/1.0"
     public weak var interactionDelegate: TSWebViewInteractionDelegate?
     
