@@ -100,8 +100,8 @@ extension AppCoordinator {
     @ViewBuilder
     func build(route: AppRoute) -> some View {
         switch route {
-        case .webview(let webState):
-            FeatureWebView.ViewFactory.createWebView(coordinator: self, webState: webState)
+        case .webWiew(let url):
+            FeatureWebView.ViewFactory.createWebView(coordinator: self, url: url)
         case .settings:
             FeatureSettings.ViewFactory.createSettingsView()
         }
@@ -117,12 +117,6 @@ extension AppCoordinator {
     
     func handleFullScreenChange() {
         if shouldFullScreen { return }
-        switch fullScreenCover {
-        case .webview(let webState):
-            webState.completion?()
-        default:
-            break
-        }
         fullScreenCover = nil
     }
     

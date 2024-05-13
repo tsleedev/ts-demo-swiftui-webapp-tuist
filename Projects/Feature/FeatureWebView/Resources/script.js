@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", function() {
     // 제목이 존재하면, 페이지 상단에 제목을 추가
     if (page) {
         var header = document.createElement("h1");
-        header.textContent = page + " Page";
+        header.textContent = "Page " + page;
         document.body.insertBefore(header, document.body.firstChild);
     } else {
         var header = document.createElement("h1");
@@ -30,48 +30,6 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 /* Bridge 기능 */
-// afterCloseScript, navigationStyle는 nullable
-document.getElementById("bridgeNewWebViewPush").onclick = function() {
-    var message = {
-        url: window.location.href,
-        afterCloseScript: "onAppResponse('새 창 닫음(push)');",
-//        afterCloseScript: null,
-        navigationStyle: "push", // iOS의 경우 push 타입은 창을 닫은 이후에 스크립트를 날릴 수 없어 push 타입의 새창을 띄울 수 없음(modal은 가능한데 아래 화면이 안 보일 수 있음), 필요하다면 modal 타입으로 띄우고 닫침 스크립트를 전달 받고 새창을 띄울 수 있음
-    };
-    callPlatformSpecificMethod('newWebView', message);
-};
-
-document.getElementById("bridgeNewWebViewReplace").onclick = function() {
-    var message = {
-        url: "https://finnq.com",
-        afterCloseScript: "onAppResponse('새 창 닫음(replace)');",
-//        afterCloseScript: null,
-        navigationStyle: "replace",
-    };
-    callPlatformSpecificMethod('newWebView', message);
-};
-
-document.getElementById("bridgeNewWebViewModal").onclick = function() {
-    var message = {
-        url: window.location.href,
-        afterCloseScript: "onAppResponse('새 창 닫음(modal)');",
-        navigationStyle: "modal",
-    };
-    callPlatformSpecificMethod('newWebView', message);
-};
-
-document.getElementById("bridgePopWebView").onclick = function() {
-    callPlatformSpecificMethod('popWebView', '');
-};
-
-document.getElementById("bridgePopToRootWebView").onclick = function() {
-    callPlatformSpecificMethod('popToRootWebView', '');
-};
-
-document.getElementById("bridgeCloseWebView").onclick = function() {
-    callPlatformSpecificMethod('closeWebView', '');
-};
-
 document.getElementById("bridgeFirebaseLogScreen").onclick = function() {
     firebaseLogScreen("스크린_테스트");
 };
@@ -197,7 +155,7 @@ function openNextPageInNewWindow() {
 
     // 'page' 쿼리 파라미터 값 추출 및 다음 페이지 번호 계산
     var currentPage = getQueryParam("page");
-    var nextPage = currentPage ? Number(currentPage) + 1 : 2;  // 페이지 정보가 없으면 기본값으로 2로 설정
+    var nextPage = currentPage ? Number(currentPage) + 1 : 1;  // 페이지 정보가 없으면 기본값으로 1로 설정
 
     // 새 창에서 다음 페이지 URL 열기
     var baseUrl = window.location.href.split('?')[0];

@@ -9,10 +9,6 @@
 import Foundation
 
 enum ScripMessageHandlerNames: String, CaseIterable {
-    case newWebView
-    case popWebView
-    case popToRootWebView
-    case closeWebView
     case firebaseLogScreen
     case firebaseLogEvent
     case firebaseSetUserProperty

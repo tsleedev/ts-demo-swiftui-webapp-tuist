@@ -14,10 +14,11 @@ struct WebView: View {
     
     var body: some View {
         ZStack {
-            ForEach(Array(zip(viewModel.webViewStates.indices, viewModel.webViewStates)), id: \.1.identifier) { index, webViewState in
+            WebViewRepresentable(viewModel: viewModel, webView: viewModel.mainWebView)
+            ForEach(Array(zip(viewModel.childWebViews.indices, viewModel.childWebViews)), id: \.1.id) { index, webView in
                 Color.black
                     .opacity(Double(max(0.2 - 0.2 * (abs(viewModel.offsets[index]) / 500), 0)))
-                WebViewRepresentable(viewModel: viewModel, webView: webViewState.webView)
+                WebViewRepresentable(viewModel: viewModel, webView: webView)
                     .offset(x: viewModel.offsets[index])
                     .gesture(
                         DragGesture()
@@ -61,8 +62,7 @@ class MockCoordinator: CoordinatorProtocol {
 #Preview {
     let mockCoordinator = MockCoordinator()
     let url = ViewFactory.createWebStateForLocalHtml()
-    let webState = WebState(url: url, afterCloseScript: nil)
-    let webView = ViewFactory.createWebView(coordinator: mockCoordinator, webState: webState)
+    let webView = ViewFactory.createWebView(coordinator: mockCoordinator, url: url)
     return webView
 }
 #endif

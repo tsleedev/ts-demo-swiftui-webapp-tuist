@@ -48,8 +48,7 @@ struct TSWebAppDemoApp: App {
         
         self.viewModel = AppViewModel(appClient: MockAppClient())
         let url = ViewFactory.createWebStateForLocalHtml()
-        let webState = WebState(url: url, afterCloseScript: nil)
-        self.coordinator = AppCoordinator(.webview(webState), isActive: .constant(false))
+        self.coordinator = AppCoordinator(.webWiew(url), isActive: .constant(false))
     }
     
     var body: some Scene {

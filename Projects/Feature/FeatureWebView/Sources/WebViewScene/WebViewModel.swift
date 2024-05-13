@@ -13,32 +13,10 @@ import TSWebView
 import FeatureCommon
 import SwiftUI
 
-enum NavigationStyle: String {
-    case push, replace, modal
-}
-
-struct WebViewState: Hashable {
-    let identifier: UUID = UUID()
-    let webView: TSWebView
-    let afterCloseScript: String?
-    
-    init(webView: TSWebView, afterCloseScript: String?) {
-        self.webView = webView
-        self.afterCloseScript = afterCloseScript
-    }
-    
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(identifier)
-    }
-    
-    static func == (lhs: WebViewState, rhs: WebViewState) -> Bool {
-        lhs.identifier == rhs.identifier
-    }
-}
-
 final class WebViewModel: NSObject, ObservableObject {
     // MARK: - Published
-    @Published var webViewStates: [WebViewState] = []
+    @Published var mainWebView: TSWebView
+    @Published var childWebViews: [TSWebView] = []
     @Published var offsets: [CGFloat] = []
     @Published var isLoading: Bool = false
     
@@ -46,10 +24,15 @@ final class WebViewModel: NSObject, ObservableObject {
     private let coordinator: CoordinatorProtocol
     
     // MARK: - Initialize
-    init(coordinator: CoordinatorProtocol, webState: WebState) {
+    init(coordinator: CoordinatorProtocol, url: URL) {
         self.coordinator = coordinator
+        let webView = TSWebView()
+        webView.addScriptMessageHandler(names: ScripMessageHandlerNames.allNames)
+        webView.load(url: url)
+        mainWebView = webView
         super.init()
-        createWebView(url: webState.url, afterCloseScript: webState.afterCloseScript)
+        
+        webView.interactionDelegate = self
     }
     
     deinit {
@@ -59,40 +42,18 @@ final class WebViewModel: NSObject, ObservableObject {
 
 // MARK: - Helper
 private extension WebViewModel {
-    func createWebView(url: URL, position: CGFloat = 0, afterCloseScript: String? = nil) {
-        let webView = TSWebView()
-        webView.addScriptMessageHandler(names: ScripMessageHandlerNames.allNames)
-        webView.interactionDelegate = self
-        webView.load(url: url)
-        addWebView(webView: webView, position: position, afterCloseScript: afterCloseScript)
-    }
-    
-    func addWebView(webView: TSWebView, position: CGFloat = 0, afterCloseScript: String? = nil) {
-        let webViewState = WebViewState(webView: webView, afterCloseScript: afterCloseScript)
-        webViewStates.append(webViewState)
+    func addWebView(webView: TSWebView, position: CGFloat = 0) {
+        childWebViews.append(webView)
         offsets.append(position)
     }
     
-    func replaceWebView(webView: TSWebView, afterCloseScript: String? = nil) {
-        var newWebViewStates = webViewStates
-        newWebViewStates.removeLast()
-        offsets.removeLast()
-        let webViewState = WebViewState(webView: webView, afterCloseScript: afterCloseScript)
-        newWebViewStates.append(webViewState)
-        webViewStates = newWebViewStates
-        offsets.append(0)
-    }
-    
     func removeWebViewState(af index: Int) {
-        guard webViewStates[safe: index] != nil, offsets[safe: index] != nil else {
+        guard childWebViews[safe: index] != nil, offsets[safe: index] != nil else {
             print("Attempted to access out of range index: \(index)")
             return
         }
-        let webViewState = webViewStates.remove(at: index)
+        childWebViews.remove(at: index)
         offsets.remove(at: index)
-        if let afterCloseScript = webViewState.afterCloseScript {
-            webViewStates.last?.webView.evaluateJavaScript(afterCloseScript)
-        }
     }
 }
 
@@ -112,35 +73,12 @@ extension WebViewModel {
         resetOffset(for: offsets.endIndex - 1, duration: duration)
     }
     
-    func newWebView(_ url: URL, afterCloseScript: String? = nil, style: NavigationStyle = .push) {
-        switch style {
-        case .push:
-            let screenWidth = UIScreen.main.bounds.width
-            createWebView(url: url, position: screenWidth, afterCloseScript: afterCloseScript)
-            let duration = animationDuration(currentOffset: screenWidth, appearing: true)
-            resetOffset(for: offsets.endIndex - 1, duration: duration)
-        case .replace:
-            let webView = TSWebView()
-            webView.addScriptMessageHandler(names: ScripMessageHandlerNames.allNames)
-            webView.interactionDelegate = self
-            webView.load(url: url)
-            replaceWebView(webView: webView, afterCloseScript: afterCloseScript)
-        case .modal:
-            coordinator.fullScreenCover(.webview(.init(url: url, afterCloseScript: afterCloseScript, completion: { [weak self] in
-                guard let self = self else { return }
-                if let afterCloseScript = afterCloseScript {
-                    webViewStates.last?.webView.evaluateJavaScript(afterCloseScript)
-                }
-            })))
-        }
-    }
-    
     func popWebView(_ webView: TSWebView) {
-        guard webViewStates.count > 1,
-              let index = webViewStates.firstIndex(where: { $0.webView == webView }), index != 0
+        guard !childWebViews.isEmpty,
+              let index = childWebViews.firstIndex(where: { $0 == webView })
         else { return }
         
-        if index < webViewStates.endIndex - 1 { // 마지막 웹뷰가 아니면 웹뷰만 제거
+        if index < childWebViews.endIndex - 1 { // 마지막 웹뷰가 아니면 웹뷰만 제거
             removeWebViewState(af: index)
         } else { // 마지막 웹뷰인 경우 애니메이션과 함께 제거
             let duration = animationDuration(currentOffset: 0, appearing: false)
@@ -150,29 +88,23 @@ extension WebViewModel {
     
     func pop() {
         // 배열에 최소 두 개의 요소가 있을 경우에만 마지막 웹뷰 제거
-        guard webViewStates.count > 1 else { return }
+        guard !childWebViews.isEmpty else { return }
         let duration = animationDuration(currentOffset: 0, appearing: false)
-        // 마지막 웹뷰인 경우 애니메이션과 함께 제거
-        dismissView(for: webViewStates.endIndex - 1, duration: duration)
+        dismissView(for: childWebViews.endIndex - 1, duration: duration)
     }
     
     func popToRootWebView() {
-        // 배열에 최소 두 개의 요소가 있을 경우에만 첫 웹뷰를 제외한 모든 웹뷰 제거
-        guard webViewStates.count > 1 else { return }
+        guard !childWebViews.isEmpty else { return }
         
         // 마지막 웹뷰 제외하고 모든 웹뷰 제거
-        webViewStates.removeSubrange(1..<webViewStates.count - 1)
+        childWebViews.removeSubrange(1..<childWebViews.count - 1)
         offsets.removeSubrange(1..<offsets.count - 1)
         
         // 마지막 웹뷰에 대한 애니메이션 처리
-        if let lastWebViewIndex = webViewStates.indices.last {
+        if let lastWebViewIndex = childWebViews.indices.last {
             let duration = animationDuration(currentOffset: 0, appearing: false)
             dismissView(for: lastWebViewIndex, duration: duration)
         }
-    }
-    
-    func closeWebView() {
-        coordinator.dismiss()
     }
     
     func revealSettings() {
@@ -208,7 +140,7 @@ extension WebViewModel {
     }
     
     private func isGestureStaringOnLeftEdge(startLocationX: CGFloat) -> Bool {
-        if webViewStates.count == 1 { return false } // 최상단 웹뷰는 지우지 않음
+        guard !childWebViews.isEmpty else { return false }
         let edgeWidth: CGFloat = 20.0 // 왼쪽 가장자기 범위 설정
         return startLocationX >= 0.0 && startLocationX <= edgeWidth
     }
@@ -265,27 +197,6 @@ extension WebViewModel: TSWebViewInteractionDelegate {
 
 // MARK: - Bridge
 @objc private extension WebViewModel {
-    func newWebView(_ actions: [String: Any]) {
-        guard let urlString = actions["url"] as? String,
-              let url = URL(string: urlString)
-        else { return }
-        let style = NavigationStyle(rawValue: actions["navigationStyle"] as? String ?? "push") ?? .push
-        let script = actions["afterCloseScript"] as? String
-        newWebView(url, afterCloseScript: script, style: style)
-    }
-    
-    func popWebView(_ actions: [String: Any]) {
-        pop()
-    }
-    
-    func popToRootWebView(_ actions: [String: Any]) {
-        popToRootWebView()
-    }
-    
-    func closeWebView(_ actions: [String: Any]) {
-        closeWebView()
-    }
-    
     func firebaseLogScreen(_ actions: [String: Any]) {
         guard let screenName = actions["screenName"] as? String else { return }
         TSAnalytics.screenEvent(screenName, screenClass: self)
@@ -308,15 +219,3 @@ extension WebViewModel: TSWebViewInteractionDelegate {
         revealSettings()
     }
 }
-
-#if DEBUG
-struct _WebViewModelInternalState {
-    var afterCloseScript: String?
-}
-
-extension WebViewModel {
-    func _test_internalState() -> _WebViewModelInternalState {
-        return .init(afterCloseScript: "")
-    }
-}
-#endif

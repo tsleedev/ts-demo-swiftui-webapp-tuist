@@ -11,8 +11,8 @@ import Foundation
 import SwiftUI
 
 public struct ViewFactory {
-    public static func createWebView(coordinator: CoordinatorProtocol, webState: WebState) -> some View {
-        let viewModel = WebViewModel(coordinator: coordinator, webState: webState)
+    public static func createWebView(coordinator: CoordinatorProtocol, url: URL) -> some View {
+        let viewModel = WebViewModel(coordinator: coordinator, url: url)
         return WebView(viewModel: viewModel)
     }
     
