@@ -1,0 +1,68 @@
+//
+//  WebView.swift
+//  FeatureWebView
+//
+//  Created by TAE SU LEE on 5/7/24.
+//  Copyright © 2024 https://github.com/tsleedev. All rights reserved.
+//
+
+import FeatureCommon
+import SwiftUI
+
+struct WebView: View {
+    @StateObject var viewModel: WebViewModel
+    
+    var body: some View {
+        ZStack {
+            ForEach(Array(zip(viewModel.webViewStates.indices, viewModel.webViewStates)), id: \.1.identifier) { index, webViewState in
+                Color.black
+                    .opacity(Double(max(0.2 - 0.2 * (abs(viewModel.offsets[index]) / 500), 0)))
+                WebViewRepresentable(viewModel: viewModel, webView: webViewState.webView)
+                    .offset(x: viewModel.offsets[index])
+                    .gesture(
+                        DragGesture()
+                            .onChanged { gesture in
+                                viewModel.updateOffset(
+                                    for: index,
+                                    with: gesture.translation.width,
+                                    startLocationX: gesture.startLocation.x)
+                            }
+                            .onEnded { gesture in
+                                viewModel.handleSwipeGesture(
+                                    for: index,
+                                    with: gesture.translation.width,
+                                    startLocationX: gesture.startLocation.x
+                                )
+                            }
+                    )
+            }
+            .edgesIgnoringSafeArea(.bottom)
+        }
+        .navigationBarBackButtonHidden()
+        .onAppear(perform: {
+            print("tslee11 onAppear")
+        })
+    }
+}
+
+#if DEBUG
+class MockCoordinator: CoordinatorProtocol {
+    func deepLink(_ route: FeatureCommon.AppRoute) {}
+    func push(_ route: FeatureCommon.AppRoute) {}
+    func replace(_ route: FeatureCommon.AppRoute) {}
+    func pop() {}
+    func dismiss() {}
+    func popToRoot() {}
+    func fullScreenCover(_ route: FeatureCommon.AppRoute) {}
+    func alert(_ state: FeatureCommon.AlertPanelState) {}
+    func confirm(_ state: FeatureCommon.ConfirmPanelState) {}
+}
+
+#Preview {
+    let mockCoordinator = MockCoordinator()
+    let url = ViewFactory.createWebStateForLocalHtml()
+    let webState = WebState(url: url, afterCloseScript: nil)
+    let webView = ViewFactory.createWebView(coordinator: mockCoordinator, webState: webState)
+    return webView
+}
+#endif

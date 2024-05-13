@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Message Handler Test</title>
+            <link rel="stylesheet" type="text/css" href="style.css">
+    </head>
+    <body>
+        <h3>Bridge 응답</h3>
+        <div id="message-container">
+            응답 대기
+        </div>
+        
+        
+        <h3>Bridge 사용</h3>
+        <div>
+            <button id="bridgeNewWebViewPush" class="buttonStyle">새 창<br>push</button>
+            <button id="bridgeNewWebViewReplace" class="buttonStyle">새 창<br>replace</button>
+            <button id="bridgeNewWebViewModal" class="buttonStyle">새 창<br>modal</button>
+        </div>
+        <div>
+            <button id="bridgePopWebView" class="buttonStyle">창 닫기<br>pop</button>
+            <button id="bridgePopToRootWebView" class="buttonStyle">창 닫기<br>popToRoot</button>
+            <button id="bridgeCloseWebView" class="buttonStyle">창 닫기<br>modal</button>
+        </div>
+        <div>
+            <button id="bridgeFirebaseLogScreen" class="buttonStyle">Firebase<br>logScreen</button>
+            <button id="bridgeFirebaseLogEvent" class="buttonStyle">Firebase<br>logEvent</button>
+            <button id="bridgeFirebaseSetUserProperty" class="buttonStyle">Firebase<br>setUserProperty</button>
+        </div>
+        <div>
+            <button id="bridgeSettings" class="buttonStyle">네이티브 화면<br>설정</button>
+        </div>
+        
+        <h3>기본 브라우저 기능</h3>
+        <h5>href click tests</h5>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">
+                        <span style="font-family: monospace">target="_top"</span>
+                    </th>
+                    <th scope="col">
+                        <span style="font-family: monospace">target="_blank"</span>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <a target="_top" href="https://google.com/">Web Link</a>
+                    </td>
+                    <td>
+                        <a target="_blank" href="https://google.com/">Web Link</a>
+                    </td>
+                </tr>
+                <!-- Android -->
+                <tr class="android-links">
+                    <td>
+                        <a target="_top" href="https://play.google.com/store/apps/details?id=com.google.android.googlequicksearchbox">Play Store Link (https://)</a>
+                    </td>
+                    <td>
+                        <a target="_blank" href="https://play.google.com/store/apps/details?id=com.google.android.googlequicksearchbox">Play Store Link (https://)</a>
+                    </td>
+                </tr>
+                <tr class="android-links">
+                    <td>
+                        <a target="_top" href="market://details?id=com.google.android.googlequicksearchbox">Play Store Link (market://)</a>
+                    </td>
+                    <td>
+                        <a target="_blank" href="market://details?id=com.google.android.googlequicksearchbox">Play Store Link (market://)</a>
+                    </td>
+                </tr>
+                <!-- iOS -->
+                <tr class="ios-links">
+                    <td>
+                        <a target="_top" href="https://apps.apple.com/us/app/google/id284815942">App Store Link</a>
+                    </td>
+                    <td>
+                        <a target="_blank" href="https://apps.apple.com/us/app/google/id284815942">App Store Link</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <a href="tel:1234567890">Call 123-456-7890</a>
+        <br>
+        <a href="mailto:someone@example.com">Send Email</a>
+        
+        <h5>JavaScript click tests</h5>
+        <div>
+            <button id="tapOpenWindow" class="buttonStyle">window.open()</button>
+            <button id="tapCloseWindow" class="buttonStyle">window.close()</button>
+            <button id="tapOpenAndCloseWindow" class="buttonStyle">window<br>openAndClose</button>
+        </div>
+        
+        <div>
+            <button id="tapCloseParentWindow" class="buttonStyle">window.opener.close()</button>
+            <button id="tapSendMessageToParent" class="buttonStyle">부모에게 값 전달</button>
+        </div>
+        
+        <div>
+            <button id="tapShowAlert" class="buttonStyle">alert()</button>
+            <button id="tapShowConfirm" class="buttonStyle">confirm()</button>
+            <button id="tapGetUserAgent" class="buttonStyle">navigator<br>userAgent</button>
+        </div>
+        
+        <div>
+            <button id="tapCheckCameraPermission" class="buttonStyle">카메라 권한</button>
+        </div>
+        
+<!--        <form id="uploadForm">-->
+<!--            <input type="file" id="cameraInput" accept="image/*" capture> <!-- "사진 찍기"가 바로 제공됨 -->
+<!--                <label for="cameraInput" class="buttonStyle">사진 촬영</label>-->
+<!--                <img id="previewImage" src="#" alt="Image preview"/> <!-- 이미지 미리보기 영역 -->
+<!--                <div id="fileInfo"></div> <!-- 파일 정보 표시 영역 -->
+<!--        </form>-->
+
+        <form id="uploadForm">
+            <input type="file" id="cameraInput" accept="image/*"> <!-- "사진 보관함", "사진 찍기", "파일 선택" 중 선택 할 수 있도록 제공됨 -->
+            <label for="cameraInput" class="buttonStyle">사진 촬영/선택</label>
+            <img id="previewImage" src="#" alt="Image preview"/> <!-- 이미지 미리보기 영역 -->
+            <div id="fileInfo"></div> <!-- 파일 정보 표시 영역 -->
+        </form>
+        
+        <!-- JavaScript 파일 연결 -->
+        <script src="script.js"></script>
+    </body>
+</html>
