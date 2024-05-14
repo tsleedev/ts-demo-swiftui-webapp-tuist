@@ -38,7 +38,6 @@ public struct ConfirmPanelState {
 public protocol CoordinatorProtocol {
     func deepLink(_ route: AppRoute)
     func push(_ route: AppRoute)
-    func replace(_ route: AppRoute)
     func pop()
     func dismiss()
     func popToRoot()

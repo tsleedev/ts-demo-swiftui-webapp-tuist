@@ -50,7 +50,6 @@ struct WebView: View {
 class MockCoordinator: CoordinatorProtocol {
     func deepLink(_ route: FeatureCommon.AppRoute) {}
     func push(_ route: FeatureCommon.AppRoute) {}
-    func replace(_ route: FeatureCommon.AppRoute) {}
     func pop() {}
     func dismiss() {}
     func popToRoot() {}
