@@ -1,0 +1,15 @@
+//
+//  {{ name }}View.swift
+//  Feature{{ name }}
+//
+//  Created by {{ creatorName }} on {{ currentDate }}.
+//  Copyright © {{ currentYear }} {{ organizationName }}. All rights reserved.
+//
+
+import SwiftUI
+
+public class ViewFactory {
+    public static func create{{ name }}View() -> some View {
+        {{ name }}View()
+    }
+}

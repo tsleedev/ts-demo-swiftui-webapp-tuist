@@ -1,0 +1,25 @@
+//
+//  {{ name }}Tests.swift
+//  Feature{{ name }}
+//
+//  Created by {{ creatorName }} on {{ currentDate }}.
+//  Copyright © {{ currentYear }} {{ organizationName }}. All rights reserved.
+//
+
+import XCTest
+
+@testable import Feature{{ name }}
+
+final class Feature{{ name }}Tests: XCTestCase {
+    override func setUpWithError() throws {
+        
+    }
+    
+    override func tearDownWithError() throws {
+       
+    }
+    
+    func testTwoPlusTwoIsFour() {
+        XCTAssertEqual(2+2, 4)
+    }
+}

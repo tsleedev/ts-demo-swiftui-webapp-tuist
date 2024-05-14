@@ -1,0 +1,21 @@
+//
+//  {{ name }}View.swift
+//  Feature{{ name }}
+//
+//  Created by {{ creatorName }} on {{ currentDate }}.
+//  Copyright © {{ currentYear }} {{ organizationName }}. All rights reserved.
+//
+
+import SwiftUI
+
+struct {{ name }}View: View {
+    var body: some View {
+        Text("{{ name }}")
+    }
+}
+
+#if DEBUG
+#Preview {
+    {{ name }}View()
+}
+#endif

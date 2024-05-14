@@ -1,0 +1,15 @@
+import ProjectDescription
+import ProjectDescriptionHelpers
+
+var targets: [Target] {
+    let target: [Target] = [
+        Module.Core.{{ name }}.target,
+        Module.Core.{{ name }}.tests,
+    ]
+    return target
+}
+
+let project = Project.app(
+    name: Module.Core.{{ name }}.rawValue,
+    targets: targets
+)

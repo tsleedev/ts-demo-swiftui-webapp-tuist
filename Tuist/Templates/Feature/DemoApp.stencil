@@ -1,0 +1,20 @@
+//
+//  Feature{{ name }}DemoApp.swift
+//  Feature{{ name}}
+//
+//  Created by {{ creatorName }} on {{ currentDate }}.
+//  Copyright © {{ currentYear }} {{ organizationName }}. All rights reserved.
+//
+
+import FeatureCommon
+import Feature{{ name }}
+import SwiftUI
+
+@main
+struct Feature{{ name }}DemoApp: App {
+    var body: some Scene {
+        WindowGroup {
+            ViewFactory.create{{ name }}View()
+        }
+    }
+}
