@@ -35,6 +35,10 @@ open class TSWebView: WKWebView, WKScriptMessageHandler, Identifiable {
         configuration.allowsInlineMediaPlayback = true
         configuration.mediaTypesRequiringUserActionForPlayback = WKAudiovisualMediaTypes(rawValue: 0)
         configuration.processPool = WebProgressPoolManager.shared.progressPoll
+        
+        let wkPreferences = WKPreferences()
+        wkPreferences.javaScriptCanOpenWindowsAutomatically = true
+        configuration.preferences = wkPreferences
         self.init(frame: .zero, configuration: configuration)
     }
     

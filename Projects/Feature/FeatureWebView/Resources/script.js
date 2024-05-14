@@ -73,6 +73,10 @@ document.getElementById("tapCloseParentWindow").onclick = function() {
     }
 };
 
+document.getElementById("tapOpenPopupWindow").onclick = function() {
+    window.open('popupHtml.html', '_blank');
+};
+
 document.getElementById("tapGetUserAgent").onclick = function() {
     var userAgent = navigator.userAgent;
     alert(userAgent);
