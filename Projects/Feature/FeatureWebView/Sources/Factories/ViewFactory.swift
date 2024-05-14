@@ -20,9 +20,7 @@ public struct ViewFactory {
     public static func createWebStateForLocalHtml() -> URL {
         let htmlPath = Bundle.module.path(forResource: "testHtml", ofType: "html")!
         let url = URL(fileURLWithPath: htmlPath)
-        let urlStrintWithQuery = url.absoluteString + "?title=test1"
-        let finalURL = URL(string: urlStrintWithQuery)!
-        return finalURL
+        return url
     }
 #endif
 }

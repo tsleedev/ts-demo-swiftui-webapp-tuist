@@ -68,21 +68,20 @@ open class TSWebView: WKWebView, WKScriptMessageHandler, Identifiable {
     // MARK: - Progress
     private func observeProgress() {
         progressObserver = observe(\.estimatedProgress, options: .new) { [weak self] _, change in
-            guard
-                let self = self,
-                let newValue = change.newValue
+            guard let self = self,
+                  let newValue = change.newValue
             else { return }
             let progress = Int(newValue * 100)
-            self.progressView?.progress = Float(newValue)
-            self.progressView?.isHidden = (progress >= 100)
+            progressView?.progress = Float(newValue)
+            progressView?.isHidden = (progress >= 100)
         }
     }
     
     private func createProgress() {
         if progressView != nil { return }
         let progressView = UIProgressView(progressViewStyle: .bar)
-        progressView.trackTintColor = UIColor(red: 245.0 / 255.0, green: 239.0 / 255.0, blue: 255.0 / 255.0, alpha: 1.0)
-        progressView.progressTintColor = UIColor(red: 138.0 / 255.0, green: 111.0 / 255.0, blue: 234.0 / 255.0, alpha: 1.0)
+        progressView.trackTintColor = UIColor.blue.withAlphaComponent(0.1)
+        progressView.progressTintColor = UIColor.blue.withAlphaComponent(0.5)
         progressView.isHidden = true
         addSubview(progressView)
         if let superview = progressView.superview {

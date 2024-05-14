@@ -45,7 +45,7 @@ public extension TSCookieManager {
     
     static func syncWebCookies(_ cookies: [HTTPCookie], onlyName: String? = nil) async {
         for cookie in cookies {
-            await syncWebCookies(cookies, onlyName: onlyName)
+            await syncWebCookie(cookie, onlyName: onlyName)
         }
     }
     
