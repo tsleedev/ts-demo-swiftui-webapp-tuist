@@ -6,6 +6,7 @@ public extension Module {
         case TSAnalytics
         case TSCrashlytics
         case TSDeepLinks
+        case TSLocation
         case TSLogger
         case TSMessaging
         case TSNetwork
@@ -26,7 +27,7 @@ extension Module.Core: Moduleable {
                 Module.Core.TSLogger.project,
                 External.Moya.dependency
             ]
-        case .TSLogger, .TSUtility:
+        case .TSLocation, .TSLogger, .TSUtility:
             dependencies = []
         }
         return dependencies
