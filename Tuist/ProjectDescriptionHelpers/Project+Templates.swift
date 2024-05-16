@@ -5,7 +5,7 @@ public extension Project {
                     targets: [Target]) -> Project {
         return Project(
             name: name,
-            organizationName: "https://github.com/tsleedev",
+            organizationName: AppConfig.organizationName,
             targets: targets
         )
     }

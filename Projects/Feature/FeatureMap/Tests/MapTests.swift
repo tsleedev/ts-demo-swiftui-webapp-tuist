@@ -1,6 +1,6 @@
 //
-//  LocationTests.swift
-//  FeatureLocation
+//  MapTests.swift
+//  FeatureMap
 //
 //  Created by taesulee on 2024/05/14.
 //  Copyright © 2024 https://github.com/tsleedev/. All rights reserved.
@@ -8,9 +8,9 @@
 
 import XCTest
 
-@testable import FeatureLocation
+@testable import FeatureMap
 
-final class FeatureLocationTests: XCTestCase {
+final class FeatureMapTests: XCTestCase {
     override func setUpWithError() throws {
         
     }

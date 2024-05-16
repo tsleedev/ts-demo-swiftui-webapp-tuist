@@ -4,8 +4,8 @@ private let ProjectPath = "Projects/Feature"
 public extension Module {
     enum Feature: String, CaseIterable {
         case Common = "FeatureCommon"
-        case Location = "FeatureLocation"
         case Main = "FeatureMain"
+        case Map = "FeatureMap"
         case Settings = "FeatureSettings"
         case WebView = "FeatureWebView"
     }
@@ -15,9 +15,9 @@ extension Module.Feature: Moduleable {
     public var resources: ResourceFileElements? {
         let resources: ResourceFileElements?
         switch self {
-        case .Common, .Main, .Location, .Settings:
+        case .Common, .Main, .Settings:
             resources = []
-        case .WebView:
+        case .Map, .WebView:
             resources = [
                 .glob(pattern: .relativeToManifest("Resources/**")),
             ]
@@ -41,7 +41,12 @@ extension Module.Feature: Moduleable {
                 Module.Feature.Settings.project,
                 Module.Feature.WebView.project,
             ]
-        case .Location, .Settings:
+        case .Map:
+            targetSpecificDependencies = [
+                Module.Feature.Common.project,
+                Module.Core.TSLocation.project,
+            ]
+        case .Settings:
             targetSpecificDependencies = []
         case .WebView:
             targetSpecificDependencies = [

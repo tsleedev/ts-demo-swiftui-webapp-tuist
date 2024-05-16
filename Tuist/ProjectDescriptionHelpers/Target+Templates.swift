@@ -36,7 +36,20 @@ public extension Target {
             "CFBundleShortVersionString": "1.0",
             "CFBundleVersion": "1",
             "UIMainStoryboardFile": "",
-            "UILaunchStoryboardName": "LaunchScreen"
+            "UILaunchStoryboardName": "LaunchScreen",
+            "NSLocationAlwaysAndWhenInUseUsageDescription": "위치 정보 요청",
+            "NSLocationWhenInUseUsageDescription": "위치 정보 요청",
+            "UIBackgroundModes": [
+                "location",
+                "fetch",
+            ],
+            "BGTaskSchedulerPermittedIdentifiers": [
+                "com.yourcompany.app.refresh",
+            ]
+        ]
+        
+        let launchArguments: [LaunchArgument] = [
+            .launchArgument(name: "-IDEPreferLogStreaming", isEnabled: true),
         ]
         
         return .makeTarget(name: "\(name)DemoApp",
@@ -45,7 +58,7 @@ public extension Target {
                            sources: sources,
                            resources: resources,
                            dependencies: dependencies,
-                           settings: nil)
+                           launchArguments: launchArguments)
     }
     
     static func makeAppExtension(name: String,

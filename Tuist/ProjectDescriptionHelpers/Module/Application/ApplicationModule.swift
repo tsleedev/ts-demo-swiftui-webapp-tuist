@@ -85,7 +85,7 @@ extension ApplicationModule: Moduleable {
             sources: sources,
             resources: resources,
             headers: headers,
-//            entitlements: .file(path: .relativeToRoot("\(ApplicationProjectPath)/Sources/ddd.entitlements"))
+            entitlements: .file(path: .relativeToRoot("\(ApplicationProjectPath)/TSWebAppDemo.entitlements")),
             dependencies: dependencies,
             settings: settings,
             launchArguments: launchArguments,

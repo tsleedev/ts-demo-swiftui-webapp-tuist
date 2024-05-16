@@ -127,9 +127,11 @@ public struct TSLogger {
             
             if #available(iOS 14.0, *) {
                 filter.logger.log(level: filter.type, "\(prefix) \(output)")
+                TSFileLogger.shared.log("\(prefix) \(output)")
             } else {
                 let message = "\(prefix) \(output)"
                 os_log(filter.type, log: filter.osLog, "%@", message)
+                TSFileLogger.shared.log(message)
             }
         }
 #endif

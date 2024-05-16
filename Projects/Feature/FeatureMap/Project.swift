@@ -3,14 +3,14 @@ import ProjectDescriptionHelpers
 
 var targets: [Target] {
     let target: [Target] = [
-        Module.Feature.Location.target,
-        Module.Feature.Location.tests,
-        Module.Feature.Location.demoApp,
+        Module.Feature.Map.target,
+        Module.Feature.Map.tests,
+        Module.Feature.Map.demoApp,
     ]
     return target
 }
 
 let project = Project.app(
-    name: Module.Feature.Location.rawValue,
+    name: Module.Feature.Map.rawValue,
     targets: targets
 )
