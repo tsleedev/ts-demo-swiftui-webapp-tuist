@@ -103,7 +103,7 @@ document.getElementById("tapSendMessageToParent").onclick = function() {
     setParentText();
 };
 
-document.getElementById('tapCheckCameraPermission').onclick = function() {
+document.getElementById('tapCheckPermissionCamera').onclick = function() {
 //    alert("작업을 취소합니다.");
     checkCameraPermission((state) => { // 화살표 함수를 사용한 콜백
 //        alert('camera permission state is ' + state);
@@ -115,6 +115,21 @@ document.getElementById('tapCheckCameraPermission').onclick = function() {
         }
     });
 //    document.getElementById('cameraInput').click(); // input[type=file] 트리거
+};
+
+document.getElementById('tapCheckPermissionLocation').onclick = function() {
+    checkLocationPermission((state) => {
+        if (state === 'granted') {
+            alert('Location access is granted.');
+            // 위치 접근 권한이 허용된 경우의 로직
+        } else if (state === 'prompt') {
+            alert('Location access is prompt.');
+            // 위치 접근 권한이 프롬프트 상태인 경우의 로직
+        } else if (state === 'denied') {
+            alert('Location access is denied.');
+            // 위치 접근 권한이 거부된 경우의 로직
+        }
+    });
 };
 
 document.getElementById('cameraInput').addEventListener('change', function(event) {
@@ -258,4 +273,59 @@ function checkCameraPermission(onPermissionChecked) {
         .catch(function(error) {
             alert('카메라 권한 상태 확인 오류: ' + error);
         });
+}
+
+function checkLocationPermission(callback) {
+    if (navigator.permissions) {
+        navigator.permissions.query({ name: 'geolocation' }).then((permissionStatus) => {
+            if (permissionStatus.state === 'granted') {
+                callback('granted');
+            } else if (permissionStatus.state === 'prompt') {
+                callback('prompt');
+            } else if (permissionStatus.state === 'denied') {
+                callback('denied');
+            }
+            permissionStatus.onchange = () => {
+                callback(permissionStatus.state);
+            };
+        });
+    } else {
+        // 브라우저가 Permissions API를 지원하지 않는 경우
+        alert('Permissions API is not supported by this browser.');
+        callback('unsupported');
+    }
+}
+
+// 위치
+function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition, showError);
+    } else {
+        document.getElementById("location").innerHTML = "Geolocation is not supported by this browser.";
+    }
+}
+
+function showPosition(position) {
+    var latitude = position.coords.latitude;
+    var longitude = position.coords.longitude;
+    alert("Latitude: " + latitude + "<br>Longitude: " + longitude);
+    document.getElementById("location").innerHTML = "Latitude: " + latitude + "<br>Longitude: " + longitude;
+}
+
+function showError(error) {
+    alert("error");
+    switch(error.code) {
+        case error.PERMISSION_DENIED:
+            document.getElementById("location").innerHTML = "User denied the request for Geolocation.";
+            break;
+        case error.POSITION_UNAVAILABLE:
+            document.getElementById("location").innerHTML = "Location information is unavailable.";
+            break;
+        case error.TIMEOUT:
+            document.getElementById("location").innerHTML = "The request to get user location timed out.";
+            break;
+        case error.UNKNOWN_ERROR:
+            document.getElementById("location").innerHTML = "An unknown error occurred.";
+            break;
+    }
 }

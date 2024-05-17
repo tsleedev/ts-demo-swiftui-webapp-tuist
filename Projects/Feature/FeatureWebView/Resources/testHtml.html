@@ -12,106 +12,111 @@
             응답 대기
         </div>
         
-        <h5>JavaScript click tests</h5>
-        <div>
-            <button id="tapOpenWindow" class="buttonStyle">window.open()</button>
-            <button id="tapCloseWindow" class="buttonStyle">window.close()</button>
-            <button id="tapOpenAndCloseWindow" class="buttonStyle">window<br>openAndClose</button>
-        </div>
-        
-        <div>
-            <button id="tapCloseParentWindow" class="buttonStyle">window.opener.close()</button>
-            <button id="tapSendMessageToParent" class="buttonStyle">부모에게 값 전달</button>
-            <button id="tapOpenPopupWindow" class="buttonStyle">팝업 테스트</button>
-        </div>
-        
-        <div>
-            <button id="tapShowAlert" class="buttonStyle">alert()</button>
-            <button id="tapShowConfirm" class="buttonStyle">confirm()</button>
-            <button id="tapGetUserAgent" class="buttonStyle">navigator<br>userAgent</button>
-        </div>
-        
-        <div>
-            <button id="tapCheckCameraPermission" class="buttonStyle">카메라 권한</button>
-        </div>
-        
-<!--        <form id="uploadForm">-->
-<!--            <input type="file" id="cameraInput" accept="image/*" capture> <!-- "사진 찍기"가 바로 제공됨 -->
-<!--                <label for="cameraInput" class="buttonStyle">사진 촬영</label>-->
-<!--                <img id="previewImage" src="#" alt="Image preview"/> <!-- 이미지 미리보기 영역 -->
-<!--                <div id="fileInfo"></div> <!-- 파일 정보 표시 영역 -->
-<!--        </form>-->
-
-        <form id="uploadForm">
-            <input type="file" id="cameraInput" accept="image/*"> <!-- "사진 보관함", "사진 찍기", "파일 선택" 중 선택 할 수 있도록 제공됨 -->
-            <label for="cameraInput" class="buttonStyle">사진 촬영/선택</label>
-            <img id="previewImage" src="#" alt="Image preview"/> <!-- 이미지 미리보기 영역 -->
-            <div id="fileInfo"></div> <!-- 파일 정보 표시 영역 -->
-        </form>
-        
         <h3>기본 브라우저 기능</h3>
+        <h5>JavaScript click tests</h5>
+        <table class="table">
+            <tbody>
+                <!-- window -->
+                <tr>
+                    <td><span id="tapOpenWindow">window.open()</span></td>
+                    <td><span id="tapCloseWindow">window.close()</span></td>
+                    <td><span id="tapOpenAndCloseWindow">open&close()</span></td>
+                </tr>
+                <!-- window.opener -->
+                <tr>
+                    <td><span id="tapCloseParentWindow">opener.close()</span></td>
+                    <td><span id="tapSendMessageToParent">opener.message()</span></td>
+                    <td><span id="tapOpenPopupWindow">팝업 테스트</span></td>
+                </tr>
+                <!-- basic -->
+                <tr>
+                    <td><span id="tapShowAlert">alert()</span></td>
+                    <td><span id="tapShowConfirm">confirm()</span></td>
+                    <td><span id="tapGetUserAgent">navigator.userAgent</span></td>
+                </tr>
+                <!-- expert -->
+                <tr>
+                    <td><span id="tapCheckPermissionCamera">카메라 권한</span></td>
+                    <td><span id="tapCheckPermissionLocation">위치 권한</span></td>
+                    <td><span id="getLocation">위치 요청</span></td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <table class="table">
+            <tbody>
+                <tr>
+                    <td>보관함</td>
+                    <td><input type="file" accept="image/*"></td>  <!-- "사진 보관함", "사진 찍기", "파일 선택" 중 선택 할 수 있도록 제공됨 -->
+                </tr>
+                <tr>
+                    <td>전후 카메라</td>
+                    <td><input type="file" accept="image/*" capture="camera"></td>
+                </tr>
+                <tr>
+                    <td>후면 카메라</td>
+                    <td><input type="file" accept="image/*" capture="environment"></td>
+                </tr>
+                <tr>
+                    <td>전면 카메라</td>
+                    <td><input type="file" accept="image/*" capture="user"></td>
+                </tr>
+                <tr>
+                    <td>Phone</td>
+                    <td><a href="tel:1234567890">Call 123-456-7890</a></td>
+                </tr>
+                <tr>
+                    <td>Email</td>
+                    <td><a href="mailto:someone@example.com">Send Email</a></td>
+                </tr>
+            </tbody>
+        </table>
+        
         <h5>href click tests</h5>
         <table class="table">
             <thead>
                 <tr>
-                    <th scope="col">
-                        <span style="font-family: monospace">target="_top"</span>
-                    </th>
-                    <th scope="col">
-                        <span style="font-family: monospace">target="_blank"</span>
-                    </th>
+                    <th><span style="font-family: monospace">target="_top"</span></th>
+                    <th><span style="font-family: monospace">target="_blank"</span></th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td>
-                        <a target="_top" href="https://google.com/">Web Link</a>
-                    </td>
-                    <td>
-                        <a target="_blank" href="https://google.com/">Web Link</a>
-                    </td>
+                    <td><a target="_top" href="https://google.com/">Web Link</a></td>
+                    <td><a target="_blank" href="https://google.com/">Web Link</a></td>
                 </tr>
                 <!-- Android -->
-                <tr class="android-links">
-                    <td>
-                        <a target="_top" href="https://play.google.com/store/apps/details?id=com.google.android.googlequicksearchbox">Play Store Link (https://)</a>
-                    </td>
-                    <td>
-                        <a target="_blank" href="https://play.google.com/store/apps/details?id=com.google.android.googlequicksearchbox">Play Store Link (https://)</a>
-                    </td>
+                <tr>
+                    <td><a target="_top" href="https://play.google.com/store/apps/details?id=com.google.android.googlequicksearchbox">Play Store Link (https://)</a></td>
+                    <td><a target="_blank" href="https://play.google.com/store/apps/details?id=com.google.android.googlequicksearchbox">Play Store Link (https://)</a></td>
                 </tr>
-                <tr class="android-links">
-                    <td>
-                        <a target="_top" href="market://details?id=com.google.android.googlequicksearchbox">Play Store Link (market://)</a>
-                    </td>
-                    <td>
-                        <a target="_blank" href="market://details?id=com.google.android.googlequicksearchbox">Play Store Link (market://)</a>
-                    </td>
+                <tr>
+                    <td><a target="_top" href="market://details?id=com.google.android.googlequicksearchbox">Play Store Link (market://)</a></td>
+                    <td><a target="_blank" href="market://details?id=com.google.android.googlequicksearchbox">Play Store Link (market://)</a></td>
                 </tr>
                 <!-- iOS -->
-                <tr class="ios-links">
-                    <td>
-                        <a target="_top" href="https://apps.apple.com/us/app/google/id284815942">App Store Link</a>
-                    </td>
-                    <td>
-                        <a target="_blank" href="https://apps.apple.com/us/app/google/id284815942">App Store Link</a>
-                    </td>
+                <tr>
+                    <td><a target="_top" href="https://apps.apple.com/us/app/google/id284815942">App Store Link</a></td>
+                    <td><a target="_blank" href="https://apps.apple.com/us/app/google/id284815942">App Store Link</a></td>
                 </tr>
             </tbody>
         </table>
-        <a href="tel:1234567890">Call 123-456-7890</a>
-        <br>
-        <a href="mailto:someone@example.com">Send Email</a>
         
         <h3>Bridge 사용</h3>
-        <div>
-            <button id="bridgeFirebaseLogScreen" class="buttonStyle">Firebase<br>logScreen</button>
-            <button id="bridgeFirebaseLogEvent" class="buttonStyle">Firebase<br>logEvent</button>
-            <button id="bridgeFirebaseSetUserProperty" class="buttonStyle">Firebase<br>setUserProperty</button>
-        </div>
-        <div>
-            <button id="bridgeSettings" class="buttonStyle">네이티브 화면<br>설정</button>
-        </div>
+        <table class="table">
+            <tbody>
+                <!-- Firebase -->
+                <tr>
+                    <td><span id="bridgeFirebaseLogScreen">Firebase logScreen</span></td>
+                    <td><span id="bridgeFirebaseLogEvent">Firebase logEvent</span></td>
+                    <td><span id="bridgeFirebaseSetUserProperty">Firebase setUserProperty</span></td>
+                </tr>
+                <tr>
+                    <td><span id="tapCheckPermissionLocation">위치 요청</span></td>
+                    <td><span id="tapSendMessageToParent">네이티브 화면 설정</span></td>
+                </tr>
+            </tbody>
+        </table>
         
         <!-- JavaScript 파일 연결 -->
         <script src="script.js"></script>

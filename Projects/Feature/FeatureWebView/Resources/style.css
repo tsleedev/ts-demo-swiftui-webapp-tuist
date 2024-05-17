@@ -4,51 +4,31 @@ body {
     margin-right: 8px;
 }
 
-div {
-    display: flex; /* Flexbox를 사용하여 자식 요소들을 가로로 나열 */
-    margin-bottom: 8px
-}
 
-/* 버튼 스타일 */
-.buttonStyle {
-    display: flex; /* Flexbox를 사용하여 컨테이너를 정의 */
-    justify-content: center; /* 가로축을 기준으로 중앙 정렬 */
-    align-items: center; /* 세로축을 기준으로 중앙 정렬 */
-    width: 33vw; /* 화면 너비의 30% */
-    height: 40px; /* 버튼의 높이를 지정 */
-    font-size: 12px; /* 폰트 크기 */
-    background-color: #4CAF50; /* 배경색 */
-    color: white; /* 글자색 */
-    border: none; /* 테두리 제거 */
-    border-radius: 5px; /* 테두리 둥글게 */
-    cursor: pointer; /* 마우스 오버 시 커서 변경 */
-    text-align: center; /* 텍스트 중앙 정렬 */
-    margin-right: 8px;
-/*    white-space: nowrap; /* 텍스트가 줄바꿈 되지 않도록 설정 */
+h3, h5 {
+    margin-top: 8px;
+    margin-bottom: 0px;
 }
-
-.a button {width:33.33%}
 
 /* 앱 브릿지를 응답 확인을 위한 스크립트 메시지 표시용 */
 #message-container {
-    font-size: 16px;
+    font-size: 12px;
     background-color: #f8f9fa;
-    border-bottom: 1px solid #ddd;
-    padding: 10px;
-    text-align: center;
+    padding: 4px;
+    text-align: left;
 }
 
 /* 테이블 */
 .table {
-    font-size: 12px;
+    font-size: 11px;
     width: 100%; /* 테이블 너비를 화면에 꽉 차게 설정 */
     border-collapse: collapse; /* 테이블 셀 사이의 테두리를 겹치게 설정 */
-    margin-top: 20px; /* 상단 여백 추가 */
+    margin-top: 8px; /* 상단 여백 추가 */
 }
 
 .table th, .table td {
     border: 1px solid #ddd; /* 셀 테두리 스타일 */
-    padding: 8px; /* 셀 내부 패딩 */
+    padding: 4px; /* 셀 내부 패딩 */
     text-align: left; /* 텍스트 왼쪽 정렬 */
 }
 
@@ -66,55 +46,4 @@ div {
 /* 테이블 헤더에 monospace 폰트 적용되도록 유지 */
 .table th span {
     font-family: monospace;
-}
-
-/* Android 및 iOS 링크에 대한 스타일 */
-.android-links a, .ios-links a {
-    color: #007bff; /* 링크 색상 */
-    text-decoration: none; /* 밑줄 제거 */
-}
-
-.android-links a:hover, .ios-links a:hover {
-    text-decoration: underline; /* 마우스 호버 시 밑줄 표시 */
-}
-
-/* 사진 업로드 폼 */
-#uploadForm {
-    display: flex;
-/*    align-items: center; /* 요소들을 세로 중앙에 정렬 */
-/*    justify-content: space-between; /* 사진 선택과 이미지 미리보기 사이에 공간을 균등하게 배분 */
-    width: fit-content; /* 폼의 너비를 최대로 설정 */
-}
-
-#cameraInput {
-    opacity: 0; /* 파일 입력 필드 숨기기 */
-    position: absolute;
-}
-
-#previewImage {
-    display: none; /* 초기 상태는 숨김 */
-    height: 50px;
-    margin-left: 10px;
-    margin-right: 10px;
-    width: auto; /* 너비는 자동으로 설정 (비율 유지) */
-}
-
-#fileInfo {
-    font-size: 35px;
-    margin-left: 10px;
-    color: #333;
-    line-height: 100px; /* 높이와 같게 설정하여 수직 중앙 정렬 */
-}
-
-#cameraContainer {
-    position: relative;
-    width: 640px;
-    height: 480px;
-}
-canvas {
-    z-index: 10;
-    opacity: 0.5; /* 가이드라인의 투명도 조절 */
-}
-video, canvas {
-    object-fit: cover; /* 비디오와 캔버스를 컨테이너에 맞춤 */
 }

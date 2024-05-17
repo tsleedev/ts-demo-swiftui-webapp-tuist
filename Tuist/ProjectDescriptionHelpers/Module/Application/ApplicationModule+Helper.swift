@@ -48,7 +48,11 @@ extension ApplicationModule {
                 "NSAllowsArbitraryLoadsForMedia": true,
                 "NSAllowsArbitraryLoadsInWebContent": true
             ],
+            "NSCameraUsageDescription": "프로필 사진을 찍을때 필요합니다.",
             "NSFaceIDUsageDescription": "Face ID로 암호 잠금 해제를 위해서는 권한 승인이 필요합니다.",
+            "NSLocationAlwaysAndWhenInUseUsageDescription": "앱 사용 중 및 백그라운드에서 위치 정보를 사용합니다.",
+            "NSLocationAlwaysUsageDescription": "백그라운드에서도 위치 정보를 사용합니다.",
+            "NSLocationWhenInUseUsageDescription": "앱 사용 중 위치 정보를 사용합니다.",
             "NSPhotoLibraryAddUsageDescription": "이미지 저장을 위해서는 권한 승인이 필요합니다.",
             "NSUserTrackingUsageDescription": "추적을 허용하시면, 불필요한 광고 대신 관심사 맞춤형 광고를 받을 수 있습니다. 추적을 허용하지 않더라도 광고는 노출됩니다.",
             "UIBackgroundModes": [

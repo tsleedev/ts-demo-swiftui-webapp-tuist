@@ -12,6 +12,7 @@ enum ScripMessageHandlerNames: String, CaseIterable {
     case firebaseLogScreen
     case firebaseLogEvent
     case firebaseSetUserProperty
+    case permissionLocation
     case revealSettings
 }
 
