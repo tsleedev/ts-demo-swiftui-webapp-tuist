@@ -98,45 +98,40 @@ import BackgroundTasks
 
 
 class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate {
-
-    var window: UIWindow?
     let locationManager = CLLocationManager()
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         TSLogger.debug("========= AppStart =========")
         
         locationManager.delegate = self
-        locationManager.requestAlwaysAuthorization()
-        locationManager.startMonitoringSignificantLocationChanges()
-        
         return true
     }
     
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         switch status {
-        case .authorizedAlways:
-            TSLogger.debug("authorizedAlways")
-            locationManager.startMonitoringSignificantLocationChanges()
-        case .authorizedWhenInUse:
-            TSLogger.debug("authorizedWhenInUse")
-            locationManager.startMonitoringSignificantLocationChanges()
-        case .denied:
-            TSLogger.debug("denied")
-        case .restricted:
-            TSLogger.debug("restricted")
         case .notDetermined:
-            TSLogger.debug("notDetermined")
+            TSLogger.debug("Location services are notDetermined.")
+            locationManager.requestWhenInUseAuthorization()
+        case .authorizedWhenInUse:
+            // 앱 사용 중 권한이 승인되면 백그라운드 권한 요청
+            TSLogger.debug("Location services are authorizedWhenInUse.")
             locationManager.requestAlwaysAuthorization()
+        case .authorizedAlways:
+            TSLogger.debug("Location services are authorizedAlways.")
+            locationManager.startMonitoringSignificantLocationChanges()
+        case .restricted:
+            TSLogger.debug("Location services are restricted.")
+        case .denied:
+            TSLogger.debug("Location services are denied.")
         @unknown default:
-            TSLogger.debug("@unknown default")
+            TSLogger.debug("Location services are unknown default.")
             fatalError()
         }
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let location = locations.last else { return }
-        let logMessage = "Updated location: \(location.coordinate.latitude), \(location.coordinate.longitude)"
-        TSLogger.debug(logMessage)
+        TSLogger.debug(location)
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
