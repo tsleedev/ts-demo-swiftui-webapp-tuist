@@ -61,19 +61,19 @@ private extension TSLocationService {
 extension TSLocationService {
     public func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let location = locations.last else { return }
-        print("\(#function) \(location)")
+//        print("\(#function) \(location)")
 //        TSLogger.debug(location)
         locationPublisher.send(location)
         fireNotification(body: "\(location)")
     }
     
     public func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        print("Failed to get location: \(error)")
+//        print("Failed to get location: \(error)")
 //        TSLogger.error(error)
     }
     
     public func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
-        print("locationManagerDidChangeAuthorization \(manager)")
+//        print("locationManagerDidChangeAuthorization \(manager)")
     }
     
     public func locationManager(_ manager: CLLocationManager, didDetermineState state: CLRegionState, for region: CLRegion) {

@@ -11,6 +11,7 @@ import SwiftUI
 
 public struct LoggerView: View {
     @State private var logText: String = ""
+    @State private var showShareSheet = false
     
     public init() {}
     
@@ -25,6 +26,17 @@ public struct LoggerView: View {
                     .font(.caption2)
                     .padding()
             }
+            
+            Button(action: {
+                shareLogFile()
+            }) {
+                Text("Share Log File")
+                    .padding()
+                    .background(Color.blue)
+                    .foregroundColor(.white)
+                    .cornerRadius(8)
+            }
+            .padding()
         }
         .onAppear {
             loadLogs()
@@ -33,6 +45,14 @@ public struct LoggerView: View {
     
     func loadLogs() {
         logText = TSFileLogger.shared.readLogs()
+    }
+    
+    func getLogFileURL() -> URL {
+        return TSFileLogger.shared.getLogFileURL()
+    }
+
+    func shareLogFile() {
+        showShareSheet = true
     }
 }
 

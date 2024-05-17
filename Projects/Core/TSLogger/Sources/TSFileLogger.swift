@@ -19,7 +19,7 @@ public class TSFileLogger {
         return paths[0]
     }
 
-    private func getLogFileURL() -> URL {
+    public func getLogFileURL() -> URL {
         return getDocumentsDirectory().appendingPathComponent("location_log.txt")
     }
 

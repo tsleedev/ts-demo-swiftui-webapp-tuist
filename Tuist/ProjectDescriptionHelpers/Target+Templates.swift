@@ -37,15 +37,16 @@ public extension Target {
             "CFBundleVersion": "1",
             "UIMainStoryboardFile": "",
             "UILaunchStoryboardName": "LaunchScreen",
-            "NSLocationAlwaysAndWhenInUseUsageDescription": "위치 정보 요청",
-            "NSLocationWhenInUseUsageDescription": "위치 정보 요청",
+            "NSLocationAlwaysAndWhenInUseUsageDescription": "앱 사용 중 및 백그라운드에서 위치 정보를 사용합니다.",
+            "NSLocationAlwaysUsageDescription": "백그라운드에서도 위치 정보를 사용합니다.",
+            "NSLocationWhenInUseUsageDescription": "앱 사용 중 위치 정보를 사용합니다.",
             "UIBackgroundModes": [
                 "location",
-                "fetch",
+//                "fetch",
             ],
-            "BGTaskSchedulerPermittedIdentifiers": [
-                "com.yourcompany.app.refresh",
-            ]
+//            "BGTaskSchedulerPermittedIdentifiers": [
+//                "com.yourcompany.app.refresh",
+//            ]
         ]
         
         let launchArguments: [LaunchArgument] = [
