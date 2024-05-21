@@ -7,11 +7,13 @@
 //
 
 import TSAnalytics
+import TSLocation
 import TSLogger
 import TSUtility
 import TSWebView
 import FeatureCommon
 import SwiftUI
+import Combine
 
 final class WebViewModel: NSObject, ObservableObject {
     // MARK: - Published
@@ -22,6 +24,7 @@ final class WebViewModel: NSObject, ObservableObject {
     
     // MARK: - Properties
     private let coordinator: CoordinatorProtocol
+    private var locationCancellables = Set<AnyCancellable>()
     
     // MARK: - Initialize
     init(coordinator: CoordinatorProtocol, url: URL) {
@@ -186,33 +189,117 @@ extension WebViewModel {
 }
 
 extension WebViewModel: TSWebViewInteractionDelegate {
-    func didReceiveMessage(name: String, body: Any) {
-        let selector = NSSelectorFromString(name + ":")
+    func didReceiveMessage(webView: TSWebView, name: String, body: Any) {
+        let selector = NSSelectorFromString(name + ":with:")
         let params = body as? [String: Any] ?? [:]
         if responds(to: selector) {
-            perform(selector, with: params)
+            perform(selector, with: webView, with: params)
         }
     }
 }
 
 // MARK: - Bridge
 @objc private extension WebViewModel {
-    func firebaseLogScreen(_ actions: [String: Any]) {
+    func firebaseLogScreen(_ webView: TSWebView, with actions: [String: Any]) {
         guard let screenName = actions["screenName"] as? String else { return }
         TSAnalytics.screenEvent(screenName, screenClass: self)
     }
     
-    func firebaseLogEvent(_ actions: [String: Any]) {
+    func firebaseLogEvent(_ webView: TSWebView, withParams actions: [String: Any]) {
         guard let eventName = actions["eventName"] as? String else { return }
         let parameters = actions["param"] as? [String: Any]
         TSAnalytics.logEvent(eventName, parameters: parameters)
     }
     
-    func firebaseSetUserProperty(_ actions: [String: Any]) {
+    func firebaseSetUserProperty(_ webView: TSWebView, with actions: [String: Any]) {
         guard let name = actions["name"] as? String,
               let value = actions["value"] as? String
         else { return }
         TSAnalytics.setUserProperty(value, forName: name)
+    }
+    
+    func getPermissionLocation(_ webView: TSWebView, with actions: [String: Any]) {
+        guard let callback = actions["callbackId"] as? String else { return }
+        let permission = TSLocationService.shared.getPermission()
+        let script = "\(callback)('\(permission)');"
+        webView.evaluateJavaScript(script, completion: nil)
+    }
+    
+    func getLocation(_ webView: TSWebView, with actions: [String: Any]) {
+        guard let callback = actions["callbackId"] as? String else { return }
+        let location = TSLocationService.shared.getLocation()
+        let response: [String: Any] = [
+            "latitude": location?.latitude ?? "",
+            "longitude": location?.longitude ?? ""
+        ]
+        
+        // JavaScript로 응답 전달
+        if let jsonData = try? JSONSerialization.data(withJSONObject: response, options: []), let jsonString = String(data: jsonData, encoding: .utf8) {
+            let script = "\(callback)(\(jsonString));"
+            webView.evaluateJavaScript(script, completion: nil)
+        } else {
+            let script = "\(callback)('');"
+            webView.evaluateJavaScript(script, completion: nil)
+        }
+    }
+    
+    func setDestination(_ webView: TSWebView, with actions: [String: Any]) {
+        guard let callback = actions["callbackId"] as? String else { return }
+        guard let latitude = actions["latitude"] as? Double,
+              let longitude = actions["longitude"] as? Double
+        else {
+            let script = "\(callback)(\(false));"
+            webView.evaluateJavaScript(script, completion: nil)
+            return
+        }
+        TSLocationService.shared.setDestination(latitude: latitude, longitude: longitude)
+        let script = "\(callback)(\(true));"
+        webView.evaluateJavaScript(script, completion: nil)
+    }
+    
+    func removeDestination(_ webView: TSWebView, with actions: [String: Any]) {
+        TSLocationService.shared.removeDestination()
+        guard let callback = actions["callbackId"] as? String else { return }
+        let script = "\(callback)('');"
+        webView.evaluateJavaScript(script, completion: nil)
+    }
+    
+    func startUpdatingLocation(_ webView: TSWebView, with actions: [String: Any]) {
+        // 기존 구독을 취소하고 초기화
+        locationCancellables.forEach { $0.cancel() }
+        locationCancellables.removeAll()
+        
+        guard let callback = actions["callbackId"] as? String else { return }
+        TSLocationService.shared.startUpdatingLocation()
+        TSLocationService.shared.locationPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { location, isAtDestination in
+                let response: [String: Any] = [
+                    "latitude": location.coordinate.latitude,
+                    "longitude": location.coordinate.longitude,
+                    "isAtDestination": isAtDestination
+                ]
+                // JavaScript로 응답 전달
+                if let jsonData = try? JSONSerialization.data(withJSONObject: response, options: []), let jsonString = String(data: jsonData, encoding: .utf8) {
+                    let script = "\(callback)(\(jsonString));"
+                    webView.evaluateJavaScript(script, completion: nil)
+                } else {
+                    let script = "\(callback)('');"
+                    webView.evaluateJavaScript(script, completion: nil)
+                }
+            }
+            .store(in: &locationCancellables)
+    }
+    
+    func stopUpdatingLocation(_ webView: TSWebView, with actions: [String: Any]) {
+        // 기존 구독을 취소하고 초기화
+        locationCancellables.forEach { $0.cancel() }
+        locationCancellables.removeAll()
+        TSLocationService.shared.stopUpdatingLocation()
+        
+        guard let callback = actions["callbackId"] as? String else { return }
+        let script = "\(callback)();"
+        webView.evaluateJavaScript(script, completion: nil)
     }
     
     func revealSettings(_ actions: [String: Any]) {

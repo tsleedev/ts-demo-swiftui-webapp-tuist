@@ -49,6 +49,7 @@ struct TSWebAppDemoApp: App {
         self.viewModel = AppViewModel(appClient: MockAppClient())
         let url = ViewFactory.createWebStateForLocalHtml()
         self.coordinator = AppCoordinator(.webWiew(url), isActive: .constant(false))
+        requestAuthNotification()
     }
     
     var body: some Scene {
@@ -103,6 +104,16 @@ struct TSWebAppDemoApp: App {
                 @unknown default:
                     break
                 }
+            }
+        }
+    }
+    
+    private func requestAuthNotification() {
+        let center = UNUserNotificationCenter.current()
+        let notificationAuthOptions = UNAuthorizationOptions(arrayLiteral: [.alert, .badge, .sound])
+        center.requestAuthorization(options: notificationAuthOptions) { success, error in
+            if let error = error {
+                print("Error: \(error.localizedDescription)")
             }
         }
     }

@@ -14,7 +14,7 @@ import Combine
 final class MapViewModel: ObservableObject {
     @Published var region: MKCoordinateRegion
     
-    private let locationService = TSLocationService()
+    private let locationService = TSLocationService.shared
     private var cancellables = Set<AnyCancellable>()
     
     init() {
@@ -30,17 +30,17 @@ final class MapViewModel: ObservableObject {
 
 extension MapViewModel {
     func startUpdatingLocation() {
-        locationService.startUpdatingLocation()
+//        locationService.startUpdatingLocation()
     }
     
     func stopUpdatingLocation() {
-        locationService.stopUpdatingLocation()
+//        locationService.stopUpdatingLocation()
     }
     
     func bind() {
         locationService.locationPublisher
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] location in
+            .sink { [weak self] location, isAtDestination in
                 guard let self = self else { return }
                 region = MKCoordinateRegion(
                     center: location.coordinate,

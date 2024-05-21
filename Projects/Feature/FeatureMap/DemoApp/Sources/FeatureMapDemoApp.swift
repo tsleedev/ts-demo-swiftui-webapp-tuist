@@ -99,12 +99,40 @@ import BackgroundTasks
 
 class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate {
     let locationManager = CLLocationManager()
+    private var targetLocation: CLLocationCoordinate2D? = CLLocationCoordinate2D(latitude: 37.43435176451452, longitude: 126.90276015091996) // 석수역1호선 1번출구
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         TSLogger.debug("========= AppStart =========")
         
+        requestAuthNotification()
+        
         locationManager.delegate = self
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager.distanceFilter = 50 // 50미터 간격으로 위치 업데이트
+        locationManager.allowsBackgroundLocationUpdates = true // 백그라운드 위치 업데이트 허용
+        locationManager.pausesLocationUpdatesAutomatically = false // 자동 일시 중지 비활성화
+        
+        // 중요 위치 변경 이벤트로 앱이 시작된 경우 처리
+        if let _ = launchOptions?[.location] {
+            // 위치 업데이트 처리
+            TSLogger.debug("App launched due to significant location change")
+        }
+        
         return true
+    }
+    
+    func applicationWillTerminate(_ application: UIApplication) {
+        TSLogger.debug("========= applicationWillTerminate =========")
+    }
+    
+    func requestAuthNotification() {
+        let center = UNUserNotificationCenter.current()
+        let notificationAuthOptions = UNAuthorizationOptions(arrayLiteral: [.alert, .badge, .sound])
+        center.requestAuthorization(options: notificationAuthOptions) { success, error in
+            if let error = error {
+                print("Error: \(error.localizedDescription)")
+            }
+        }
     }
     
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
@@ -132,6 +160,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let location = locations.last else { return }
         TSLogger.debug(location)
+        // 특정 위치에 도달했는지 확인
+        if let target = targetLocation {
+            let targetLocation = CLLocation(latitude: target.latitude, longitude: target.longitude)
+            if location.distance(from: targetLocation) < 100 { // 예: 100미터 이내
+                locationManager.stopMonitoringSignificantLocationChanges()
+                TSLogger.debug("Target location reached. Monitoring stopped.")
+                let content = UNMutableNotificationContent()
+                content.title = "알림"
+                content.body = "약속 장소에 도착했어요."
+                
+                let uuidString = UUID().uuidString
+                let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
+                let request = UNNotificationRequest(identifier: "Test-\(uuidString)", content: content, trigger: trigger)
+                UNUserNotificationCenter.current().add(request, withCompletionHandler: { (error) in
+                    if error != nil {
+                        // Handle the error
+                    }
+                })
+            }
+        }
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
@@ -180,10 +228,10 @@ struct FeatureMapDemoApp: App {
             }
         }
         .onChange(of: scenePhase) { newPhase in
-            if newPhase == .background {
-                TSLogger.debug("background")
+//            if newPhase == .background {
+                TSLogger.debug(newPhase)
 //                appDelegate.scheduleAppRefresh()
-            }
+//            }
         }
     }
 }

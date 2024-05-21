@@ -43,8 +43,8 @@ extension Module.Feature: Moduleable {
             ]
         case .Map:
             targetSpecificDependencies = [
-                Module.Feature.Common.project,
                 Module.Core.TSLocation.project,
+                Module.Feature.Common.project,
             ]
         case .Settings:
             targetSpecificDependencies = []
@@ -52,6 +52,7 @@ extension Module.Feature: Moduleable {
             targetSpecificDependencies = [
                 Module.Core.TSAnalytics.project,
                 Module.Core.TSCrashlytics.project,
+                Module.Core.TSLocation.project,
                 Module.Core.TSUtility.project,
                 Module.Feature.Common.project,
                 Module.UI.TSUIKitExtensions.project,

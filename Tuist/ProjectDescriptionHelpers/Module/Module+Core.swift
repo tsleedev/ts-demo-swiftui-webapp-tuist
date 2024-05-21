@@ -22,12 +22,12 @@ extension Module.Core: Moduleable {
             dependencies = [
                 Module.ExternalBridges.Firebase.project,
             ]
-        case .TSNetwork:
+        case .TSLocation, .TSNetwork:
             dependencies = [
                 Module.Core.TSLogger.project,
                 External.Moya.dependency
             ]
-        case .TSLocation, .TSLogger, .TSUtility:
+        case .TSLogger, .TSUtility:
             dependencies = []
         }
         return dependencies

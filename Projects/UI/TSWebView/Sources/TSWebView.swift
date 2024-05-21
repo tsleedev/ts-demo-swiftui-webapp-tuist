@@ -14,7 +14,7 @@ class WebProgressPoolManager {
 }
 
 public protocol TSWebViewInteractionDelegate: AnyObject {
-    func didReceiveMessage(name: String, body: Any)
+    func didReceiveMessage(webView: TSWebView, name: String, body: Any)
 }
 
 open class TSWebView: WKWebView, WKScriptMessageHandler, Identifiable {
@@ -163,6 +163,6 @@ public extension TSWebView {
 // MARK: - WKScriptMessageHandler
 extension TSWebView {
     public func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
-        interactionDelegate?.didReceiveMessage(name: message.name, body: message.body)
+        interactionDelegate?.didReceiveMessage(webView: self, name: message.name, body: message.body)
     }
 }

@@ -45,6 +45,47 @@ document.getElementById("bridgeFirebaseSetUserProperty").onclick = function() {
     firebaseSetUserProperty("Property_테스트", "PropertyValue");
 };
 
+document.getElementById("bridgeGetPermissionLocation").onclick = function() {
+    callPlatformSpecificMethod('getPermissionLocation', {}, function(response) {
+        onAppResponse("App Response: " + JSON.stringify(response));
+    });
+};
+
+document.getElementById("bridgeGetLocation").onclick = function() {
+    callPlatformSpecificMethod('getLocation', {}, function(response) {
+        onAppResponse("App Response: " + JSON.stringify(response));
+    });
+};
+
+document.getElementById("bridgeStartUpdatingLocation").onclick = function() {
+    var message = {
+        callbackId: "cb_UpdatingLocation"
+    };
+    callPlatformSpecificMethod('startUpdatingLocation', message);
+};
+
+document.getElementById("bridgeStopUpdatingLocation").onclick = function() {
+    callPlatformSpecificMethod('stopUpdatingLocation', {}, function(response) {
+        onAppResponse("App Response: stopUpdatingLocation");
+    });
+};
+
+document.getElementById("bridgeSetDestination").onclick = function() {
+    const destination = {
+        latitude: 37.4967867,
+        longitude: 126.9978993
+    };
+    callPlatformSpecificMethod('setDestination', destination, function(response) {
+        onAppResponse("App Response: setDestination(" + response + ")");
+    });
+};
+
+document.getElementById("bridgeRemoveDestination").onclick = function() {
+    callPlatformSpecificMethod('removeDestination', {}, function(response) {
+        onAppResponse("App Response: removeDestination");
+    });
+};
+
 document.getElementById("bridgeSettings").onclick = function() {
     callPlatformSpecificMethod('revealSettings', '');
 };
@@ -183,7 +224,18 @@ function openNextPageInNewWindow() {
 }
 
 // bridge
-function callPlatformSpecificMethod(methodName, message) {
+function callPlatformSpecificMethod(methodName, message, callback) {
+    if (callback) {
+        const callbackId = 'cb_' + new Date().getTime();
+        message.callbackId = callbackId;
+        // 콜백 함수를 글로벌로 설정
+        window[callbackId] = function(response) {
+            onAppResponse(callbackId);
+            callback(response);
+            delete window[callbackId];
+        };
+    }
+    
     resetMessage()
     if (window.AnalyticsWebInterface) {
         // Android 인터페이스 호출
@@ -195,7 +247,11 @@ function callPlatformSpecificMethod(methodName, message) {
         window.webkit.messageHandlers[methodName].postMessage(message);
     } else {
         // 플랫폼 인터페이스를 찾을 수 없음
-        onAppResponse("No native " + methodName + " method found.");
+        if (callback) {
+            callback({ error: "No native " + methodName + " method found." });
+        } else {
+            alert("No native " + methodName + " method found.");
+        }
     }
 }
 
@@ -297,6 +353,10 @@ function checkLocationPermission(callback) {
 }
 
 // 위치
+function cb_UpdatingLocation(response) {
+    onAppResponse("App Response: " + JSON.stringify(response));
+}
+
 function getLocation() {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(showPosition, showError);
