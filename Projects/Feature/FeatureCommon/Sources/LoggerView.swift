@@ -41,6 +41,9 @@ public struct LoggerView: View {
         .onAppear {
             loadLogs()
         }
+        .sheet(isPresented: $showShareSheet) {
+            ActivityViewController(activityItems: [getLogFileURL()])
+        }
     }
     
     func loadLogs() {
