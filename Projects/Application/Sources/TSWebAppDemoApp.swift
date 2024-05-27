@@ -19,14 +19,32 @@ import SwiftUI
 
 class AppDelegate: NSObject, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
-        FBAppConfig.configure()
-        TSCrashlytics.crashlyticsLog(type: .app, log: "application(_:didFinishLaunchingWithOptions:")
-        
+        application.registerForRemoteNotifications()
         return true
     }
     
-    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+    func applicationWillTerminate(_ application: UIApplication) {
+        let content = UNMutableNotificationContent()
+        content.title = "앱 종료"
+        content.body = "앱이 종료되었습니다."
         
+        let uuidString = UUID().uuidString
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
+        let request = UNNotificationRequest(identifier: "Test-\(uuidString)", content: content, trigger: trigger)
+        UNUserNotificationCenter.current().add(request, withCompletionHandler: { (error) in
+            if error != nil {
+                // Handle the error
+            }
+        })
+    }
+    
+    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        // 디바이스 토큰을 문자열로 변환
+        let tokenParts = deviceToken.map { data in String(format: "%02.2hhx", data) }
+        let deviceTokenString = tokenParts.joined()
+        
+        // 디바이스 토큰 출력 (디버깅용)
+        print("Device Token: \(deviceTokenString)")
     }
     
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: any Error) {
