@@ -86,9 +86,18 @@ document.getElementById("bridgeRemoveDestination").onclick = function() {
     });
 };
 
-document.getElementById("bridgeSettings").onclick = function() {
-    callPlatformSpecificMethod('revealSettings', '');
+document.getElementById("bridgeRevealSettings").onclick = function() {
+    callPlatformSpecificMethod('revealSettings', {}, function(response) {
+        onAppResponse("App Response: revealSettings");
+    });
 };
+
+document.getElementById("bridgeOpenPhoneSettings").onclick = function() {
+    callPlatformSpecificMethod('openPhoneSettings', {}, function(response) {
+        onAppResponse("App Response: openPhoneSettings");
+    });
+};
+
 
 /* 기본 브라우저 기능 */
 document.getElementById("tapOpenAndCloseWindow").onclick = function() {

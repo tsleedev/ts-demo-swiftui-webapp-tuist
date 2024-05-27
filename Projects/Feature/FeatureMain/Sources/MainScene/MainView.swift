@@ -51,7 +51,7 @@ import FeatureWebView
 
 #Preview {
     let url = ViewFactory.createWebStateForLocalHtml()
-    let coordinator = AppCoordinator(.webWiew(url), isActive: .constant(false))
+    let coordinator = AppCoordinator(.webView(url), isActive: .constant(false))
     return MainView(coordinator: coordinator)
 }
 #endif

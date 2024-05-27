@@ -29,13 +29,7 @@ public final class TSLocationService: NSObject, CLLocationManagerDelegate {
 
 // MARK: - Public
 public extension TSLocationService {
-//    func requestLocation() {
-//        locationManager.requestWhenInUseAuthorization()
-//        locationManager.requestLocation()
-//    }
-    
     func setDestination(latitude: Double, longitude: Double) {
-//        guard let latitude = CLLocationDegrees(latitude), let longitude = CLLocationDegrees(longitude) else { return false }
         let location = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
         let region = CLCircularRegion(center: location,
                                       radius: 1.0,

@@ -19,6 +19,7 @@ enum ScripMessageHandlerNames: String, CaseIterable {
     case startUpdatingLocation
     case stopUpdatingLocation
     case revealSettings
+    case openPhoneSettings
 }
 
 extension ScripMessageHandlerNames {

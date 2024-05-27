@@ -11,7 +11,7 @@ import TSWebView
 
 // 네비게이션 상태를 나타내는 열거형
 public enum AppRoute: Hashable {
-    case webWiew(URL)
+    case webView(URL)
     case settings
 }
 

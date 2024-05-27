@@ -302,7 +302,16 @@ extension WebViewModel: TSWebViewInteractionDelegate {
         webView.evaluateJavaScript(script, completion: nil)
     }
     
-    func revealSettings(_ actions: [String: Any]) {
+    func revealSettings(_ webView: TSWebView, with actions: [String: Any]) {
         revealSettings()
+    }
+    
+    func openPhoneSettings(_ webView: TSWebView, with actions: [String: Any]) {
+        guard let setting = URL(string: UIApplication.openSettingsURLString) else { return }
+        UIApplication.shared.open(setting)
+                
+        guard let callback = actions["callbackId"] as? String else { return }
+        let script = "\(callback)();"
+        webView.evaluateJavaScript(script, completion: nil)
     }
 }

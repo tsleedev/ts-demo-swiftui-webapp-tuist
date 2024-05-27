@@ -100,7 +100,7 @@ extension AppCoordinator {
     @ViewBuilder
     func build(route: AppRoute) -> some View {
         switch route {
-        case .webWiew(let url):
+        case .webView(let url):
             FeatureWebView.ViewFactory.createWebView(coordinator: self, url: url)
         case .settings:
             FeatureSettings.ViewFactory.createSettingsView()

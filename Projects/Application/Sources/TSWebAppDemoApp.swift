@@ -36,6 +36,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 
 @main
 struct TSWebAppDemoApp: App {
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     @Environment(\.scenePhase) private var scenePhase
     
     @ObservedObject private var viewModel: AppViewModel
@@ -48,7 +49,7 @@ struct TSWebAppDemoApp: App {
         
         self.viewModel = AppViewModel(appClient: MockAppClient())
         let url = ViewFactory.createWebStateForLocalHtml()
-        self.coordinator = AppCoordinator(.webWiew(url), isActive: .constant(false))
+        self.coordinator = AppCoordinator(.webView(url), isActive: .constant(false))
         requestAuthNotification()
     }
     
