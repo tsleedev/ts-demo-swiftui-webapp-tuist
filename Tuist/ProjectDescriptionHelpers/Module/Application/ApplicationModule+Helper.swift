@@ -34,6 +34,14 @@ extension ApplicationModule {
             "CFBundleDevelopmentRegion": "ko_KR",
             "CFBundleShortVersionString": "$(MARKETING_VERSION)",
             "CFBundleVersion": "$(CURRENT_PROJECT_VERSION)",
+            "CFBundleURLTypes": [
+                [
+                    "CFBundleTypeRole": "Editor",
+                    "CFBundleURLSchemes": [
+                        "tswebapp",
+                    ]
+                ]
+            ],
             "FirebaseAutomaticScreenReportingEnabled": false, // Firebase 자동 화면 조회수 보고 중지
             "GADIsAdManagerApp": true,
             "ITSAppUsesNonExemptEncryption": false,

@@ -99,14 +99,14 @@ struct TSWebAppDemoApp: App {
             .onOpenURL(perform: { url in
                 Task {
                     let deepLink = await TSDeepLinks().handleUniversalLink(url)
-//                    coordinator.deepLink(.webView(.init(url: deepLink, afterCloseScript: nil)))
+                    coordinator.deepLink(.webView(deepLink))
                 }
             })
             .onContinueUserActivity(NSUserActivityTypeBrowsingWeb, perform: { userActivity in
                 Task {
                     guard let url = userActivity.webpageURL else { return }
                     let deepLink = await TSDeepLinks().handleUniversalLink(url)
-//                    coordinator.deepLink(.webView(.init(url: deepLink, afterCloseScript: nil)))
+                    coordinator.deepLink(.webView(deepLink))
                 }
             })
             .onChange(of: scenePhase) { newScenePhase in
