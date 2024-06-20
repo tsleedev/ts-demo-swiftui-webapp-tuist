@@ -1,0 +1,17 @@
+//
+//  TSService{{ name }}.swift
+//  TSService{{ name }}
+//
+//  Created by {{ creatorName }} on {{ currentDate }}.
+//  Copyright © {{ currentYear }} {{ organizationName }}. All rights reserved.
+//
+
+import Foundation
+
+public struct TSService{{ name }} {
+    
+}
+
+public extension TSService{{ name }} {
+    
+}

@@ -6,11 +6,11 @@
 //  Copyright © 2024 https://github.com/tsleedev/. All rights reserved.
 //
 
-import TSCrashlytics
-import TSDeepLinks
-import TSMessaging
-import TSUtility
-import TSWebView
+import TSCoreUtilities
+import TSServiceCrashlytics
+import TSServiceDeepLinks
+import TSServiceMessaging
+import TSUIWebView
 import FirebaseBridge
 import FeatureCommon
 import FeatureMain

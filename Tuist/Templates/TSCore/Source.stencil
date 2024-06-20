@@ -1,0 +1,17 @@
+//
+//  TSCore{{ name }}.swift
+//  TSCore{{ name }}
+//
+//  Created by {{ creatorName }} on {{ currentDate }}.
+//  Copyright © {{ currentYear }} {{ organizationName }}. All rights reserved.
+//
+
+import Foundation
+
+public struct TSCore{{ name }} {
+    
+}
+
+public extension TSCore{{ name }} {
+    
+}

@@ -6,10 +6,10 @@
 //  Copyright © 2024 https://github.com/tsleedev/. All rights reserved.
 //
 
-import TSCrashlytics
-import TSLogger
-import TSUtility
-import TSWebView
+import TSCoreLogger
+import TSCoreUtilities
+import TSServiceCrashlytics
+import TSUIWebView
 import Foundation
 import WebKit
 

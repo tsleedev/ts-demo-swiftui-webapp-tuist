@@ -6,7 +6,7 @@
 //  Copyright © 2024 https://github.com/tsleedev/. All rights reserved.
 //
 
-import TSLogger
+import TSCoreLogger
 import SwiftUI
 
 public struct LoggerView: View {

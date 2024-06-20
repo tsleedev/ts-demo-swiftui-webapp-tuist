@@ -6,11 +6,11 @@
 //  Copyright © 2024 https://github.com/tsleedev/. All rights reserved.
 //
 
-import TSAnalytics
-import TSLocation
-import TSLogger
-import TSUtility
-import TSWebView
+import TSCoreLogger
+import TSCoreUtilities
+import TSServiceAnalytics
+import TSServiceLocation
+import TSUIWebView
 import FeatureCommon
 import SwiftUI
 import Combine

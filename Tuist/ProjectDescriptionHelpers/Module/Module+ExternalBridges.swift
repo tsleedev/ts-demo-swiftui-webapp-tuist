@@ -4,6 +4,10 @@ private let ProjectPath = "Projects/ExternalBridges"
 public extension Module {
     enum ExternalBridges: String, CaseIterable {
         case Firebase = "FirebaseBridge"
+        
+        public var name: String {
+            return "\(self.rawValue)"
+        }
     }
 }
 
@@ -37,7 +41,7 @@ extension Module.ExternalBridges: Moduleable {
     
     public var target: ProjectDescription.Target {
         return Target.makeDynamicFramework(
-            name: self.rawValue,
+            name: self.name,
             sources: sources,
             resources: nil,
             dependencies: dependencies,
@@ -46,14 +50,17 @@ extension Module.ExternalBridges: Moduleable {
     }
     
     public var project: TargetDependency {
-        return .project(target: self.rawValue, path: .relativeToRoot("\(ProjectPath)/\(self.rawValue)"))
+        return .project(
+            target: self.name,
+            path: .relativeToRoot("\(ProjectPath)/\(self.name)")
+        )
     }
 }
 
 extension Module.ExternalBridges: TestsModuleable {
     public var tests: ProjectDescription.Target {
         return Target.makeTests(
-            name: self.rawValue,
+            name: self.name,
             sources: testsSources,
             resources: nil
         )

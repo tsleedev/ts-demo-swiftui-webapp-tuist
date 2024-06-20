@@ -2,7 +2,7 @@ import Foundation
 import ProjectDescription
 import ProjectDescriptionHelpers
 
-private let PathPrefix = "Projects/TSUI/"
+private let PathPrefix = "Projects/TSService/TSService"
 private let creatorName: Template.Attribute.Value = {
     let creatorName = NSUserName()
     return .string(creatorName)
@@ -28,7 +28,7 @@ private let organizationName: Template.Attribute.Value = {
 private let templateName = Template.Attribute.required("name")
 
 private let template = Template(
-    description: "TSUI template",
+    description: "TSService template",
     attributes: [
         templateName,
         .optional("creatorName", default: creatorName),

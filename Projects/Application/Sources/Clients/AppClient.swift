@@ -6,7 +6,7 @@
 //  Copyright © 2024 https://github.com/tsleedev/. All rights reserved.
 //
 
-import TSNetwork
+import TSServiceNetwork
 import Foundation
 
 //struct AppClient: AppClientProtocol {

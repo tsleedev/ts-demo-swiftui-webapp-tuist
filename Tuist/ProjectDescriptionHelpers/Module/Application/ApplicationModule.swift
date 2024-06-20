@@ -42,11 +42,11 @@ extension ApplicationModule: Moduleable {
     
     public var dependencies: [TargetDependency] {
         var dependencies = [
-            Module.Core.TSAnalytics.project,
-            Module.Core.TSCrashlytics.project,
-            Module.Core.TSDeepLinks.project,
-            Module.Core.TSMessaging.project,
-            Module.Core.TSNetwork.project,
+            Module.TSService.Analytics.project,
+            Module.TSService.Crashlytics.project,
+            Module.TSService.DeepLinks.project,
+            Module.TSService.Messaging.project,
+            Module.TSService.Network.project,
             External.Alamofire.dependency,
             
             .sdk(name: "WebKit", type: .framework, status: .required),
@@ -56,7 +56,7 @@ extension ApplicationModule: Moduleable {
             Module.Feature.Common.project,
             Module.Feature.Main.project,
         ]
-        dependencies += Module.UI.allCases.map { $0.project }
+        dependencies += Module.TSUI.allCases.map { $0.project }
         
         // AppExtension
 //        dependencies.append(.target(name: NotificationServiceExtensionModule(environment: environment).targetName))

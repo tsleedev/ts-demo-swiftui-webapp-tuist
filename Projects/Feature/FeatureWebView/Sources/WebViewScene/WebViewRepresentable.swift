@@ -6,7 +6,7 @@
 //  Copyright © 2024 https://github.com/tsleedev/. All rights reserved.
 //
 
-import TSWebView
+import TSUIWebView
 import SwiftUI
 
 struct WebViewRepresentable: UIViewRepresentable {
