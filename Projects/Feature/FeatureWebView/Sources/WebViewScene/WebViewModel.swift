@@ -125,13 +125,19 @@ extension WebViewModel {
 
 // MARK: - Animation
 extension WebViewModel {
-    func updateOffset(for index: Int, with translation: CGFloat, startLocationX: CGFloat) {
-        guard isGestureStaringOnLeftEdge(startLocationX: startLocationX) else { return }
-        offsets[index] = translation
+    func isGestureStartingOnLeftEdge(startLocationX: CGFloat) -> Bool {
+        guard !childWebViews.isEmpty else { return false }
+        let edgeWidth: CGFloat = 40.0 // 왼쪽 가장자리 범위 설정
+        return startLocationX >= 0.0 && startLocationX <= edgeWidth
     }
     
-    func handleSwipeGesture(for index: Int, with translationWidth: CGFloat, startLocationX: CGFloat) {
-        guard isGestureStaringOnLeftEdge(startLocationX: startLocationX) else { return }
+    func updateOffset(for webView: TSWebView, with translation: CGFloat) {
+        guard let index = childWebViews.firstIndex(where: { $0 == webView }) else { return }
+        offsets[index] = translation > 0 ? translation : 0
+    }
+    
+    func handleSwipeGesture(for webView: TSWebView, with translationWidth: CGFloat) {
+        guard let index = childWebViews.firstIndex(where: { $0 == webView }) else { return }
         let translationWidth = abs(translationWidth)
         if translationWidth > 100 {
             let duration = animationDuration(currentOffset: translationWidth, appearing: false)
@@ -140,12 +146,6 @@ extension WebViewModel {
             let duration = animationDuration(currentOffset: translationWidth, appearing: true)
             resetOffset(for: index, duration: duration)
         }
-    }
-    
-    private func isGestureStaringOnLeftEdge(startLocationX: CGFloat) -> Bool {
-        guard !childWebViews.isEmpty else { return false }
-        let edgeWidth: CGFloat = 20.0 // 왼쪽 가장자기 범위 설정
-        return startLocationX >= 0.0 && startLocationX <= edgeWidth
     }
     
     private func dismissView(for index: Int, duration: TimeInterval) {

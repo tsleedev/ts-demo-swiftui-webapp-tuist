@@ -14,28 +14,12 @@ struct WebView: View {
     
     var body: some View {
         ZStack {
-            WebViewRepresentable(viewModel: viewModel, webView: viewModel.mainWebView)
+            WebViewRepresentable(viewModel: viewModel, webView: viewModel.mainWebView, isSwipeBackGestureEnabled: false)
             ForEach(Array(zip(viewModel.childWebViews.indices, viewModel.childWebViews)), id: \.1.id) { index, webView in
                 Color.black
                     .opacity(Double(max(0.2 - 0.2 * (abs(viewModel.offsets[index]) / 500), 0)))
                 WebViewRepresentable(viewModel: viewModel, webView: webView)
                     .offset(x: viewModel.offsets[index])
-                    .gesture(
-                        DragGesture()
-                            .onChanged { gesture in
-                                viewModel.updateOffset(
-                                    for: index,
-                                    with: gesture.translation.width,
-                                    startLocationX: gesture.startLocation.x)
-                            }
-                            .onEnded { gesture in
-                                viewModel.handleSwipeGesture(
-                                    for: index,
-                                    with: gesture.translation.width,
-                                    startLocationX: gesture.startLocation.x
-                                )
-                            }
-                    )
             }
             .edgesIgnoringSafeArea(.bottom)
         }

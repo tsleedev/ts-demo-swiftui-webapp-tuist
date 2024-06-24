@@ -14,13 +14,15 @@ import Foundation
 import WebKit
 
 extension WebViewRepresentable {
-    class Coordinator: NSObject, WKNavigationDelegate, WKUIDelegate {
+    class Coordinator: NSObject, WKNavigationDelegate, WKUIDelegate, UIGestureRecognizerDelegate {
         // MARK: - Initialize with ViewModel
+        private let webView: TSWebView
         private let viewModel: WebViewModel
+        private var isDragging: Bool = false
         
-        init(viewModel: WebViewModel) {
+        init(webView: TSWebView, viewModel: WebViewModel) {
+            self.webView = webView
             self.viewModel = viewModel
-            super.init()
         }
         
         deinit {
@@ -98,5 +100,41 @@ extension WebViewRepresentable.Coordinator {
     func webViewDidClose(_ webView: WKWebView) {
         guard let webview = webView as? TSWebView else { return }
         viewModel.popWebView(webview)
+    }
+}
+
+// MARK: - UIGestureRecognizerDelegate
+extension WebViewRepresentable.Coordinator {
+    @objc func handleDrag(_ gesture: UIPanGestureRecognizer) {
+        switch gesture.state {
+        case .began:
+            let location = gesture.location(in: gesture.view)
+            if viewModel.isGestureStartingOnLeftEdge(startLocationX: location.x) {
+                isDragging = true
+            } else {
+                gesture.isEnabled = false
+                gesture.isEnabled = true
+            }
+        case .changed:
+            if !isDragging { return }
+            let translation = gesture.translation(in: gesture.view)
+            viewModel.updateOffset(for: webView, with: translation.x)
+        case .ended, .cancelled:
+            if !isDragging { return }
+            let translation = gesture.translation(in: gesture.view)
+            viewModel.handleSwipeGesture(for: webView, with: translation.x)
+            isDragging = false
+        default:
+            break
+        }
+    }
+
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+        // 첫 번째 드래그 제스처가 활성화된 동안 다른 터치를 무시
+        return !isDragging
+    }
+
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return false
     }
 }
