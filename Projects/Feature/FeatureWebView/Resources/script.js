@@ -406,3 +406,14 @@ function showError(error) {
             break;
     }
 }
+
+// 앱에서 호출
+function onAppBackground() {
+    // 앱이 백그라운드로 전환될 때 실행할 코드
+    onAppResponse("App has entered the background");
+}
+
+function onAppForeground() {
+    // 앱이 포어그라운드로 전환될 때 실행할 코드
+    onAppResponse("App has entered the foreground");
+}

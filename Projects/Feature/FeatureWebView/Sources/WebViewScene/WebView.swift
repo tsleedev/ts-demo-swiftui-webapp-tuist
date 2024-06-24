@@ -26,6 +26,10 @@ struct WebView: View {
         .navigationBarBackButtonHidden()
         .onAppear(perform: {
             print("tslee11 onAppear")
+            viewModel.registerForAppStateNotifications()
+        })
+        .onDisappear(perform: {
+            viewModel.unregisterForAppStateNotifications()
         })
     }
 }

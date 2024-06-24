@@ -24,6 +24,7 @@ struct WebViewRepresentable: UIViewRepresentable {
     func makeUIView(context: Context) -> TSWebView {
         webView.navigationDelegate = context.coordinator
         webView.uiDelegate = context.coordinator
+        webView.allowsBackForwardNavigationGestures = true
         
         if isSwipeBackGestureEnabled {
             let dragGesture = UIPanGestureRecognizer(target: context.coordinator, action: #selector(context.coordinator.handleDrag(_:)))

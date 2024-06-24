@@ -60,6 +60,27 @@ private extension WebViewModel {
     }
 }
 
+// MARK: - Notification
+extension WebViewModel {
+    func registerForAppStateNotifications() {
+        NotificationCenter.default.addObserver(self, selector: #selector(applicationDidEnterBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(applicationWillEnterForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
+    }
+    
+    func unregisterForAppStateNotifications() {
+        NotificationCenter.default.removeObserver(self, name: UIApplication.didEnterBackgroundNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIApplication.willEnterForegroundNotification, object: nil)
+    }
+    
+    @objc func applicationDidEnterBackground() {
+        (childWebViews.last ?? mainWebView).evaluateJavaScript("onAppBackground()", completion: nil)
+    }
+    
+    @objc func applicationWillEnterForeground() {
+        (childWebViews.last ?? mainWebView).evaluateJavaScript("onAppForeground()", completion: nil)
+    }
+}
+
 // MARK: - Internal
 extension WebViewModel {
     func setLoading(_ isLoading: Bool) {
