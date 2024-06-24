@@ -16,6 +16,10 @@ public struct ViewFactory {
         return WebView(viewModel: viewModel)
     }
     
+    public static func createSafariView(url: URL) -> some View {
+        return SafariView(url: url)
+    }
+    
 #if DEBUG
     public static func createWebStateForLocalHtml() -> URL {
         let htmlPath = Bundle.module.path(forResource: "testHtml", ofType: "html")!

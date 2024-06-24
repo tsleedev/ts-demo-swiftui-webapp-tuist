@@ -80,20 +80,35 @@ extension WebViewRepresentable.Coordinator {
         viewModel.runJavaScriptConfirmPanel(message: message, completionHandler: completionHandler)
     }
     
-    func webView(_ webView: WKWebView, runJavaScriptTextInputPanelWithPrompt prompt: String, defaultText: String?, initiatedByFrame frame: WKFrameInfo, completionHandler: @escaping (String?) -> Void) {
-        // TODO: 추후 필요하면 추가
-    }
-    
-    func webView(_ webView: WKWebView, contextMenuConfigurationForElement elementInfo: WKContextMenuElementInfo, completionHandler: @escaping (UIContextMenuConfiguration?) -> Void) {
-        // TODO: 추후 필요하면 추가
-    }
-    
     func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration, for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
-        if navigationAction.targetFrame == nil {
+        guard let currentURL = webView.url,
+              let newURL = navigationAction.request.url
+        else { return nil }
+        
+#if DEBUG
+        // DEBUG 모드에서 file:// URL 처리
+        if currentURL.scheme == "file" {
+            if currentURL.scheme == newURL.scheme {
+                let webView = TSWebView(createWebViewWith: configuration)
+                viewModel.newWebView(webView)
+                return webView // webView return 없이 사용할 경우 웹의 부모창에서 자식창을 닫을 수 없음. webViewDidClose가 호출이 안됨
+            } else {
+                viewModel.requestExternalNavigation(to: newURL)
+                return nil
+            }
+        }
+#endif
+        
+        if let currentHost = currentURL.host,
+           let newHost = newURL.host,
+           currentHost == newHost {
             let webView = TSWebView(createWebViewWith: configuration)
             viewModel.newWebView(webView)
             return webView // webView return 없이 사용할 경우 웹의 부모창에서 자식창을 닫을 수 없음. webViewDidClose가 호출이 안됨
+        } else {
+            viewModel.requestExternalNavigation(to: newURL)
         }
+        
         return nil
     }
     

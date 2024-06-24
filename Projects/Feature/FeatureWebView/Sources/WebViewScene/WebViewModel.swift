@@ -69,6 +69,10 @@ extension WebViewModel {
 //        }
     }
     
+    func requestExternalNavigation(to url: URL) {
+        coordinator.fullScreenCover(.safariView(url))
+    }
+    
     func newWebView(_ webView: TSWebView) {
         let screenWidth = UIScreen.main.bounds.width
         addWebView(webView: webView, position: screenWidth)

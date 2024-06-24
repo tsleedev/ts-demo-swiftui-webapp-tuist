@@ -102,6 +102,9 @@ extension AppCoordinator {
         switch route {
         case .webView(let url):
             FeatureWebView.ViewFactory.createWebView(coordinator: self, url: url)
+        case .safariView(let url):
+            FeatureWebView.ViewFactory.createSafariView(url: url)
+                .ignoresSafeArea()
         case .settings:
             FeatureSettings.ViewFactory.createSettingsView()
         }

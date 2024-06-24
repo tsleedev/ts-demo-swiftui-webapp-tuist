@@ -111,6 +111,14 @@ document.getElementById("tapOpenWindow").onclick = function() {
     openNextPageInNewWindow()
 };
 
+document.getElementById("tapOpenWindowPlayStore").onclick = function() {
+    window.open('https://play.google.com/store/apps/details?id=com.google.android.googlequicksearchbox', '_blank');
+};
+
+document.getElementById("tapOpenWindowAppStore").onclick = function() {
+    window.open('https://apps.apple.com/us/app/google/id284815942', '_blank');
+};
+
 document.getElementById("tapCloseWindow").onclick = function() {
     window.close();
 };
