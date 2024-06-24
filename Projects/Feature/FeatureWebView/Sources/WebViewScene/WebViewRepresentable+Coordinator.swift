@@ -81,7 +81,8 @@ extension WebViewRepresentable.Coordinator {
     }
     
     func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration, for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
-        guard let currentURL = webView.url,
+        guard navigationAction.targetFrame == nil,
+              let currentURL = webView.url,
               let newURL = navigationAction.request.url
         else { return nil }
         
