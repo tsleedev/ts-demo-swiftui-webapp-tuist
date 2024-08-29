@@ -9,28 +9,26 @@
 import FeatureCommon
 import SwiftUI
 
-struct WebView: View {
-    @StateObject var viewModel: WebViewModel
+struct WebView<Coordinator: CoordinatorProtocol>: View {
+    @StateObject private var coordinator: Coordinator
+    private let startUrl: URL
+    
+    init(coordinator: Coordinator, startUrl: URL) {
+        _coordinator = StateObject(wrappedValue: coordinator)
+        self.startUrl = startUrl
+    }
+    
+//    @EnvironmentObject var coordinator: Coordinator
+    
+//    init(startUrl: URL) {
+//        self.startUrl = startUrl
+//    }
     
     var body: some View {
         ZStack {
-            WebViewRepresentable(viewModel: viewModel, webView: viewModel.mainWebView, isSwipeBackGestureEnabled: false)
-            ForEach(Array(zip(viewModel.childWebViews.indices, viewModel.childWebViews)), id: \.1.id) { index, webView in
-                Color.black
-                    .opacity(Double(max(0.2 - 0.2 * (abs(viewModel.offsets[index]) / 500), 0)))
-                WebViewRepresentable(viewModel: viewModel, webView: webView)
-                    .offset(x: viewModel.offsets[index])
-            }
-            .edgesIgnoringSafeArea(.bottom)
+            WebViewRepresentable(coordinator: coordinator, startUrl: startUrl)
         }
         .navigationBarBackButtonHidden()
-        .onAppear(perform: {
-            print("tslee11 onAppear")
-            viewModel.registerForAppStateNotifications()
-        })
-        .onDisappear(perform: {
-            viewModel.unregisterForAppStateNotifications()
-        })
     }
 }
 
@@ -46,10 +44,24 @@ class MockCoordinator: CoordinatorProtocol {
     func confirm(_ state: FeatureCommon.ConfirmPanelState) {}
 }
 
+//struct WebViewPreview: View {
+//    @StateObject private var mockCoordinator = MockCoordinator()
+//    
+//    var body: some View {
+//        let url = URL(string: "https://example.com")! // 여기에 ViewFactory.createWebStateForLocalHtml()를 사용하세요
+//        ViewFactory.createWebView<MockCoordinator>(url: url)
+//            .environmentObject(mockCoordinator)
+//    }
+//}
+//
+//#Preview {
+//    WebViewPreview()
+//}
+
 #Preview {
     let mockCoordinator = MockCoordinator()
     let url = ViewFactory.createWebStateForLocalHtml()
     let webView = ViewFactory.createWebView(coordinator: mockCoordinator, url: url)
-    return webView
+    return webView.environmentObject(mockCoordinator)
 }
 #endif

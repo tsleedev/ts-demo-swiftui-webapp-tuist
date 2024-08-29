@@ -3,13 +3,16 @@
 //  TSFramework
 //
 //  Created by TAE SU LEE on 2021/07/09.
+//  Copyright © 2024 https://github.com/tsleedev/. All rights reserved.
 //
 
 import WebKit
 
 extension WKWebView {
     func setJavaScriptController(_ controller: TSJavaScriptController) {
-        controller.injectTo(configuration.userContentController)
+        if configuration.preferences.javaScriptEnabled {
+            controller.injectTo(configuration.userContentController)
+        }
     }
 }
 

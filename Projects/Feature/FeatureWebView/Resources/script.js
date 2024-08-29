@@ -31,18 +31,18 @@ document.addEventListener("DOMContentLoaded", function() {
 
 /* Bridge 기능 */
 document.getElementById("bridgeFirebaseLogScreen").onclick = function() {
-    firebaseLogScreen("스크린_테스트");
+    screenEvent("스크린_테스트");
 };
 
 document.getElementById("bridgeFirebaseLogEvent").onclick = function() {
     var message = {
         value: "파라미터",
     };
-    firebaseLogEvent("이벤트_테스트", message);
+    logEvent("이벤트_테스트", message);
 };
 
 document.getElementById("bridgeFirebaseSetUserProperty").onclick = function() {
-    firebaseSetUserProperty("Property_테스트", "PropertyValue");
+    setUserProperty("Property_테스트", "PropertyValue");
 };
 
 document.getElementById("bridgeGetPermissionLocation").onclick = function() {
@@ -190,30 +190,30 @@ document.getElementById('tapCheckPermissionLocation').onclick = function() {
     });
 };
 
-document.getElementById('cameraInput').addEventListener('change', function(event) {
-    const fileInfo = document.getElementById('fileInfo');
-    const previewImage = document.getElementById('previewImage');
-    const file = event.target.files[0];
-
-    if (file) {
-        // 이미지 미리보기
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            previewImage.src = e.target.result;
-            previewImage.style.display = 'inline'; // 이미지 미리보기를 인라인으로 표시
-
-            // 파일 이름 표시는 이미지 미리보기 후에 진행
-            fileInfo.textContent = `${file.name}`;
-            fileInfo.style.display = 'block'; // 파일 정보 표시
-        };
-        reader.readAsDataURL(file); // 파일 읽기 시작
-    } else {
-        // 파일 선택 취소시 정보 초기화
-        previewImage.style.display = 'none';
-        previewImage.src = '';
-        fileInfo.textContent = '';
-    }
-});
+//document.getElementById('cameraInput').addEventListener('change', function(event) {
+//    const fileInfo = document.getElementById('fileInfo');
+//    const previewImage = document.getElementById('previewImage');
+//    const file = event.target.files[0];
+//
+//    if (file) {
+//        // 이미지 미리보기
+//        const reader = new FileReader();
+//        reader.onload = function(e) {
+//            previewImage.src = e.target.result;
+//            previewImage.style.display = 'inline'; // 이미지 미리보기를 인라인으로 표시
+//
+//            // 파일 이름 표시는 이미지 미리보기 후에 진행
+//            fileInfo.textContent = `${file.name}`;
+//            fileInfo.style.display = 'block'; // 파일 정보 표시
+//        };
+//        reader.readAsDataURL(file); // 파일 읽기 시작
+//    } else {
+//        // 파일 선택 취소시 정보 초기화
+//        previewImage.style.display = 'none';
+//        previewImage.src = '';
+//        fileInfo.textContent = '';
+//    }
+//});
 
 /* Function */
 function openNextPageInNewWindow() {
@@ -298,32 +298,33 @@ function setParentText() {
 }
 
 // Firebase
-function firebaseLogScreen(name) {
+function screenEvent(name, parameters) {
     if (!name) {
         return;
     }
     
     var message = {
-        screenName: name,
+        name: name,
+        parameters: parameters
     };
     
-    callPlatformSpecificMethod('firebaseLogScreen', message);
+    callPlatformSpecificMethod('screenEvent', message);
 }
 
-function firebaseLogEvent(name, params) {
+function logEvent(name, parameters) {
     if (!name) {
         return;
     }
     
     var message = {
         eventName: name,
-        param: params
+        parameters: parameters
     };
     
-    callPlatformSpecificMethod('firebaseLogEvent', message);
+    callPlatformSpecificMethod('logEvent', message);
 }
 
-function firebaseSetUserProperty(name, value) {
+function setUserProperty(name, value) {
     if (!name || !value) {
         return;
     }
@@ -333,7 +334,7 @@ function firebaseSetUserProperty(name, value) {
         value: value
     };
     
-    callPlatformSpecificMethod('firebaseSetUserProperty', message);
+    callPlatformSpecificMethod('setUserProperty', message);
 }
 
 // 페이지 로딩 시 또는 특정 동작을 할 때 권한 상태 확인

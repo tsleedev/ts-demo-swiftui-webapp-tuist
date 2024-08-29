@@ -7,39 +7,27 @@
 //
 
 import TSUIWebView
+import FeatureCommon
 import SwiftUI
 
-struct WebViewRepresentable: UIViewRepresentable {
-    // MARK: - Initialize with ViewModel
-    private let viewModel: WebViewModel
-    private let webView: TSWebView
-    private let isSwipeBackGestureEnabled: Bool
+struct WebViewRepresentable<Coordinator: CoordinatorProtocol>: UIViewControllerRepresentable {
+    // MARK: - Initialize with Coordinator
+    private let coordinator: Coordinator
+    private let startUrl: URL
     
-    init(viewModel: WebViewModel, webView: TSWebView, isSwipeBackGestureEnabled: Bool = true) {
-        self.viewModel = viewModel
-        self.webView = webView
-        self.isSwipeBackGestureEnabled = isSwipeBackGestureEnabled
+    init(coordinator: Coordinator, startUrl: URL) {
+        self.coordinator = coordinator
+        self.startUrl = startUrl
     }
     
-    func makeUIView(context: Context) -> TSWebView {
-        webView.navigationDelegate = context.coordinator
-        webView.uiDelegate = context.coordinator
-        webView.allowsBackForwardNavigationGestures = true
-        
-        if isSwipeBackGestureEnabled {
-            let dragGesture = UIPanGestureRecognizer(target: context.coordinator, action: #selector(context.coordinator.handleDrag(_:)))
-            dragGesture.delegate = context.coordinator
-            webView.addGestureRecognizer(dragGesture)
-        }
-        
-        return webView
+    func makeUIViewController(context: Context) -> FeatureWebViewController<Coordinator> {
+        let webView = TSWebView()
+        webView.load(url: startUrl)
+        let viewController = FeatureWebViewController(coordinator: coordinator, webView: webView)
+        return viewController
     }
-
-    func updateUIView(_ webView: TSWebView, context: Context) {
+    
+    func updateUIViewController(_ uiViewController: FeatureWebViewController<Coordinator>, context: Context) {
         
-    }
-
-    func makeCoordinator() -> Coordinator {
-        Coordinator(webView: webView, viewModel: viewModel)
     }
 }

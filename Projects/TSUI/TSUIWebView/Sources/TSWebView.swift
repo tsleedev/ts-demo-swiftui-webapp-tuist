@@ -3,6 +3,7 @@
 //  TSFramework
 //
 //  Created by TAE SU LEE on 2021/07/08.
+//  Copyright © 2024 https://github.com/tsleedev/. All rights reserved.
 //
 
 import WebKit
@@ -17,7 +18,7 @@ public protocol TSWebViewInteractionDelegate: AnyObject {
     func didReceiveMessage(webView: TSWebView, name: String, body: Any)
 }
 
-open class TSWebView: WKWebView, WKScriptMessageHandler, Identifiable {
+open class TSWebView: WKWebView, Identifiable {
     public let id: String = UUID().uuidString
     
     public static var applictionNameForUserAgent: String = "TSWebView/1.0"
@@ -39,10 +40,6 @@ open class TSWebView: WKWebView, WKScriptMessageHandler, Identifiable {
         let wkPreferences = WKPreferences()
         wkPreferences.javaScriptCanOpenWindowsAutomatically = true
         configuration.preferences = wkPreferences
-        self.init(frame: .zero, configuration: configuration)
-    }
-    
-    public convenience init(createWebViewWith configuration: WKWebViewConfiguration) {
         self.init(frame: .zero, configuration: configuration)
     }
     
@@ -69,23 +66,24 @@ open class TSWebView: WKWebView, WKScriptMessageHandler, Identifiable {
         observeProgress()
     }
     
-    // MARK: - Progress
     private func observeProgress() {
         progressObserver = observe(\.estimatedProgress, options: .new) { [weak self] _, change in
-            guard let self = self,
-                  let newValue = change.newValue
+            guard
+                let self = self,
+                let newValue = change.newValue
             else { return }
             let progress = Int(newValue * 100)
-            progressView?.progress = Float(newValue)
-            progressView?.isHidden = (progress >= 100)
+            self.progressView?.progress = Float(newValue)
+            self.progressView?.isHidden = (progress >= 100)
         }
     }
     
-    private func createProgress() {
+    // MARK: - Progress
+    func createProgress() {
         if progressView != nil { return }
         let progressView = UIProgressView(progressViewStyle: .bar)
-        progressView.trackTintColor = UIColor.blue.withAlphaComponent(0.1)
-        progressView.progressTintColor = UIColor.blue.withAlphaComponent(0.5)
+        progressView.trackTintColor = UIColor(red: 245.0 / 255.0, green: 239.0 / 255.0, blue: 255.0 / 255.0, alpha: 1.0)
+        progressView.progressTintColor = UIColor(red: 138.0 / 255.0, green: 111.0 / 255.0, blue: 234.0 / 255.0, alpha: 1.0)
         progressView.isHidden = true
         addSubview(progressView)
         if let superview = progressView.superview {
@@ -111,11 +109,13 @@ public extension TSWebView {
         self.javaScriptController = javaScriptController
     }
     
-    func addScriptMessageHandler(names: [String]) {
-        if names.isEmpty { return }
-        let target = LeakAvoiderScriptMessageHandler(delegate: self)
-        names.forEach { name in
-            configuration.userContentController.add(target, name: name)
+    func addScriptMessageHandler(target: WKScriptMessageHandler, messages: [[String: Any]]?) {
+        guard let messages = messages else { return }
+        let target = LeakAvoiderScriptMessageHandler(delegate: target)
+        messages.forEach { dic in
+            if let name = dic["name"] as? String {
+                configuration.userContentController.add(target, name: name)
+            }
         }
     }
     
@@ -124,9 +124,12 @@ public extension TSWebView {
         configuration.userContentController.removeAllScriptMessageHandlers()
     }
     
-    func removeScriptMessageHandler(names: [String]) {
-        names.forEach { name in
-            configuration.userContentController.removeScriptMessageHandler(forName: name)
+    func removeScriptMessageHandler(messages: [[String: Any]]?) {
+        guard let messages = messages else { return }
+        messages.forEach { dic in
+            if let name = dic["name"] as? String {
+                configuration.userContentController.removeScriptMessageHandler(forName: name)
+            }
         }
     }
     

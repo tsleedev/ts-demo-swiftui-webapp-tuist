@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import TSUIWebView
 
 // 네비게이션 상태를 나타내는 열거형
 public enum AppRoute: Hashable {
@@ -17,26 +16,30 @@ public enum AppRoute: Hashable {
 }
 
 public struct AlertPanelState {
-    public let message: String
+    public let title: String
+    public let message: String?
     public let completion: (() -> Void)?
     
-    public init(message: String, completion: (() -> Void)? = nil) {
+    public init(title: String, message: String?, completion: (() -> Void)? = nil) {
+        self.title = title
         self.message = message
         self.completion = completion
     }
 }
 
 public struct ConfirmPanelState {
-    public let message: String
+    public let title: String
+    public let message: String?
     public let completion: (Bool) -> Void
     
-    public init(message: String, completion: @escaping (Bool) -> Void) {
+    public init(title: String, message: String?, completion: @escaping (Bool) -> Void) {
+        self.title = title
         self.message = message
         self.completion = completion
     }
 }
 
-public protocol CoordinatorProtocol {
+public protocol CoordinatorProtocol: ObservableObject {
     func deepLink(_ route: AppRoute)
     func push(_ route: AppRoute)
     func pop()

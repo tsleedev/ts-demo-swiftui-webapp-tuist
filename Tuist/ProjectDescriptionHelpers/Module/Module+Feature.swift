@@ -37,7 +37,7 @@ extension Module.Feature: Moduleable {
         switch self {
         case .Common:
             targetSpecificDependencies = [
-                Module.TSUI.WebView.project,
+                
             ]
         case .Main:
             targetSpecificDependencies = [

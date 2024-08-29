@@ -12,7 +12,7 @@ import FeatureSettings
 import SwiftUI
 import Combine
 
-public class AppCoordinator: ObservableObject, CoordinatorProtocol {
+public class AppCoordinator: CoordinatorProtocol {
     // MARK: - Published
     @Published var path: NavigationPath
     private var routeStack: [AppRoute] = []
@@ -127,14 +127,14 @@ extension AppCoordinator {
         let alert: Alert
         if let state = alertPanelState {
             alert = Alert(
-                title: Text("알림"),
-                message: Text(state.message),
+                title: Text(state.title),
+                message: Text(state.message ?? ""),
                 dismissButton: .default(Text("확인"), action: state.completion)
             )
         } else if let state = confirmPanelState {
             alert = Alert(
-                title: Text("알림"),
-                message: Text(state.message),
+                title: Text(state.title),
+                message: Text(state.message ?? ""),
                 primaryButton: .default(Text("확인"), action: { state.completion(true) }),
                 secondaryButton: .cancel(Text("취소"), action: { state.completion(false) })
             )
