@@ -317,7 +317,7 @@ function logEvent(name, parameters) {
     }
     
     var message = {
-        eventName: name,
+        name: name,
         parameters: parameters
     };
     

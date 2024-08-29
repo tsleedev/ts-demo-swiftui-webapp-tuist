@@ -129,7 +129,7 @@ extension AppCoordinator {
             alert = Alert(
                 title: Text(state.title),
                 message: Text(state.message ?? ""),
-                dismissButton: .default(Text("확인"), action: state.completion)
+                dismissButton: .default(Text("확인"), action: state.completion ?? {})
             )
         } else if let state = confirmPanelState {
             alert = Alert(
