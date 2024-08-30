@@ -18,12 +18,6 @@ struct WebView<Coordinator: CoordinatorProtocol>: View {
         self.startUrl = startUrl
     }
     
-//    @EnvironmentObject var coordinator: Coordinator
-    
-//    init(startUrl: URL) {
-//        self.startUrl = startUrl
-//    }
-    
     var body: some View {
         ZStack {
             WebViewRepresentable(coordinator: coordinator, startUrl: startUrl)
@@ -43,20 +37,6 @@ class MockCoordinator: CoordinatorProtocol {
     func alert(_ state: FeatureCommon.AlertPanelState) {}
     func confirm(_ state: FeatureCommon.ConfirmPanelState) {}
 }
-
-//struct WebViewPreview: View {
-//    @StateObject private var mockCoordinator = MockCoordinator()
-//    
-//    var body: some View {
-//        let url = URL(string: "https://example.com")! // 여기에 ViewFactory.createWebStateForLocalHtml()를 사용하세요
-//        ViewFactory.createWebView<MockCoordinator>(url: url)
-//            .environmentObject(mockCoordinator)
-//    }
-//}
-//
-//#Preview {
-//    WebViewPreview()
-//}
 
 #Preview {
     let mockCoordinator = MockCoordinator()

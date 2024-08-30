@@ -164,7 +164,7 @@ class JavaScriptHandler<Coordinator: CoordinatorProtocol>: NSObject, JavaScriptI
     }
     
     func revealSettings(_ response: Any) {
-        
+        coordinator.push(.settings)
     }
     
     func openPhoneSettings(_ response: Any) {

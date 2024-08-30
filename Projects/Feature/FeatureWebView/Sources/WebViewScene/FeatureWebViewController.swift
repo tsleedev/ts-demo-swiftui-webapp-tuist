@@ -30,6 +30,7 @@ class FeatureWebViewController<Coordinator: CoordinatorProtocol>: TSWebViewContr
     override func viewDidLoad() {
         super.viewDidLoad()
         webView.allowsBackForwardNavigationGestures = true
+        webView.scrollView.bounces = false
     }
     
     override func viewWillAppear(_ animated: Bool) {

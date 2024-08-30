@@ -12,7 +12,6 @@ import SwiftUI
 
 public struct ViewFactory {
     public static func createWebView<Coordinator: CoordinatorProtocol>(coordinator: Coordinator, url: URL) -> some View {
-//        let viewModel = WebViewModel(coordinator: coordinator, url: url)
         return WebView(coordinator: coordinator, startUrl: url)
     }
     
