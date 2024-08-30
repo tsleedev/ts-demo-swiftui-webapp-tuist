@@ -23,18 +23,22 @@ class FeatureWebViewController<Coordinator: CoordinatorProtocol>: TSWebViewContr
         fatalError("init(coder:) has not been implemented")
     }
     
+    deinit {
+        print("\(type(of: self)) \(#function)")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        let jsHandler = JavaScriptHandler(coordinator: coordinator, webView: webView)
-        webView.javaScriptEnable(target: jsHandler, protocol: JavaScriptInterface.self)
-        self.jsHandler = jsHandler
         webView.allowsBackForwardNavigationGestures = true
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: true)
+        
+        let jsHandler = JavaScriptHandler(coordinator: coordinator, webView: webView)
+        webView.javaScriptEnable(target: jsHandler, protocol: JavaScriptInterface.self)
+        self.jsHandler = jsHandler
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -73,3 +77,13 @@ extension FeatureWebViewController {
         NotificationCenter.default.removeObserver(self, name: UIApplication.willEnterForegroundNotification, object: nil)
     }
 }
+
+//extension FeatureWebViewController: TSWebViewInteractionDelegate {
+//    func didReceiveMessage(webView: TSWebView, name: String, body: Any) {
+//        let selector = NSSelectorFromString(name + ":with:")
+//        let params = body as? [String: Any] ?? [:]
+//        if responds(to: selector) {
+//            perform(selector, with: webView, with: params)
+//        }
+//    }
+//}

@@ -15,8 +15,8 @@ import Combine
 
 // MARK: - JavaScriptHandler
 class JavaScriptHandler<Coordinator: CoordinatorProtocol>: NSObject, JavaScriptInterface {
-    private var coordinator: Coordinator
-    private weak var webView: TSWebView?
+    private let coordinator: Coordinator
+    private let webView: TSWebView
     
     private var locationCancellables = Set<AnyCancellable>()
     
@@ -72,7 +72,7 @@ class JavaScriptHandler<Coordinator: CoordinatorProtocol>: NSObject, JavaScriptI
         else { return }
         let permission = TSLocationService.shared.getPermission()
         let script = "\(callback)('\(permission)');"
-        webView?.evaluateJavaScript(script, completion: nil)
+        webView.evaluateJavaScript(script, completion: nil)
     }
     
     func getLocation(_ response: Any) {
@@ -88,10 +88,10 @@ class JavaScriptHandler<Coordinator: CoordinatorProtocol>: NSObject, JavaScriptI
         // JavaScript로 응답 전달
         if let jsonData = try? JSONSerialization.data(withJSONObject: response, options: []), let jsonString = String(data: jsonData, encoding: .utf8) {
             let script = "\(callback)(\(jsonString));"
-            webView?.evaluateJavaScript(script, completion: nil)
+            webView.evaluateJavaScript(script, completion: nil)
         } else {
             let script = "\(callback)('');"
-            webView?.evaluateJavaScript(script, completion: nil)
+            webView.evaluateJavaScript(script, completion: nil)
         }
     }
     
@@ -103,12 +103,12 @@ class JavaScriptHandler<Coordinator: CoordinatorProtocol>: NSObject, JavaScriptI
               let longitude = dictionary["longitude"] as? Double
         else {
             let script = "\(callback)(\(false));"
-            webView?.evaluateJavaScript(script, completion: nil)
+            webView.evaluateJavaScript(script, completion: nil)
             return
         }
         TSLocationService.shared.setDestination(latitude: latitude, longitude: longitude)
         let script = "\(callback)(\(true));"
-        webView?.evaluateJavaScript(script, completion: nil)
+        webView.evaluateJavaScript(script, completion: nil)
     }
     
     func removeDestination(_ response: Any) {
@@ -117,7 +117,7 @@ class JavaScriptHandler<Coordinator: CoordinatorProtocol>: NSObject, JavaScriptI
               let callback = dictionary["callbackId"] as? String
         else { return }
         let script = "\(callback)('');"
-        webView?.evaluateJavaScript(script, completion: nil)
+        webView.evaluateJavaScript(script, completion: nil)
     }
     
     func startUpdatingLocation(_ response: Any) {
@@ -141,10 +141,10 @@ class JavaScriptHandler<Coordinator: CoordinatorProtocol>: NSObject, JavaScriptI
                 // JavaScript로 응답 전달
                 if let jsonData = try? JSONSerialization.data(withJSONObject: response, options: []), let jsonString = String(data: jsonData, encoding: .utf8) {
                     let script = "\(callback)(\(jsonString));"
-                    self.webView?.evaluateJavaScript(script, completion: nil)
+                    webView.evaluateJavaScript(script, completion: nil)
                 } else {
                     let script = "\(callback)('');"
-                    self.webView?.evaluateJavaScript(script, completion: nil)
+                    webView.evaluateJavaScript(script, completion: nil)
                 }
             }
             .store(in: &locationCancellables)
@@ -160,7 +160,7 @@ class JavaScriptHandler<Coordinator: CoordinatorProtocol>: NSObject, JavaScriptI
               let callback = dictionary["callbackId"] as? String
         else { return }
         let script = "\(callback)();"
-        webView?.evaluateJavaScript(script, completion: nil)
+        webView.evaluateJavaScript(script, completion: nil)
     }
     
     func revealSettings(_ response: Any) {
@@ -174,7 +174,7 @@ class JavaScriptHandler<Coordinator: CoordinatorProtocol>: NSObject, JavaScriptI
                 
         guard let callback = dictionary["callbackId"] as? String else { return }
         let script = "\(callback)();"
-        webView?.evaluateJavaScript(script, completion: nil)
+        webView.evaluateJavaScript(script, completion: nil)
     }
     
     private func showAlert(title: String, message: String) {

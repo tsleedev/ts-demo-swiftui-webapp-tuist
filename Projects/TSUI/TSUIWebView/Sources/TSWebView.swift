@@ -14,15 +14,10 @@ class WebProgressPoolManager {
     private init() {}
 }
 
-public protocol TSWebViewInteractionDelegate: AnyObject {
-    func didReceiveMessage(webView: TSWebView, name: String, body: Any)
-}
-
 open class TSWebView: WKWebView, Identifiable {
     public let id: String = UUID().uuidString
     
     public static var applictionNameForUserAgent: String = "TSWebView/1.0"
-    public weak var interactionDelegate: TSWebViewInteractionDelegate?
     
     private weak var progressView: UIProgressView?
     private var progressObserver: NSKeyValueObservation?
@@ -109,27 +104,14 @@ public extension TSWebView {
         self.javaScriptController = javaScriptController
     }
     
-    func addScriptMessageHandler(target: WKScriptMessageHandler, messages: [[String: Any]]?) {
-        guard let messages = messages else { return }
-        let target = LeakAvoiderScriptMessageHandler(delegate: target)
-        messages.forEach { dic in
-            if let name = dic["name"] as? String {
-                configuration.userContentController.add(target, name: name)
-            }
-        }
-    }
-    
     @available(iOS 14.0, *)
     func removeAllScriptMessageHandlers() {
         configuration.userContentController.removeAllScriptMessageHandlers()
     }
     
-    func removeScriptMessageHandler(messages: [[String: Any]]?) {
-        guard let messages = messages else { return }
-        messages.forEach { dic in
-            if let name = dic["name"] as? String {
-                configuration.userContentController.removeScriptMessageHandler(forName: name)
-            }
+    func removeScriptMessageHandler(names: [String]) {
+        names.forEach { name in
+            configuration.userContentController.removeScriptMessageHandler(forName: name)
         }
     }
     
@@ -160,12 +142,5 @@ public extension TSWebView {
                 completion?(response, error)
             }
         }
-    }
-}
-
-// MARK: - WKScriptMessageHandler
-extension TSWebView {
-    public func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
-        interactionDelegate?.didReceiveMessage(webView: self, name: message.name, body: message.body)
     }
 }

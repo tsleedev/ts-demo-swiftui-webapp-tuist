@@ -9,9 +9,9 @@
 import Foundation
 
 enum ScripMessageHandlerNames: String, CaseIterable {
-    case firebaseLogScreen
-    case firebaseLogEvent
-    case firebaseSetUserProperty
+    case screenEvent
+    case logEvent
+    case setUserProperty
     case getPermissionLocation
     case getLocation
     case setDestination
