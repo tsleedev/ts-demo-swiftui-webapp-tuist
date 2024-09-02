@@ -13,7 +13,8 @@ public struct ApplicationModule {
 extension ApplicationModule: Moduleable {
     public var sources: SourceFilesList? {
         let globs: [ProjectDescription.SourceFileGlob] = [
-            .glob(.relativeToRoot("\(ApplicationProjectPath)/Sources/**"))
+            .glob(.relativeToRoot("\(ApplicationProjectPath)/Sources/**")),
+            .glob(.relativeToRoot("\(ApplicationProjectPath)/Environments/\(environmentFolderName)/**")),
         ]
         return SourceFilesList.sourceFilesList(globs: globs)
     }
@@ -42,6 +43,7 @@ extension ApplicationModule: Moduleable {
     
     public var dependencies: [TargetDependency] {
         var dependencies = [
+            Module.TSCore.Configuration.project,
             Module.TSService.Analytics.project,
             Module.TSService.Crashlytics.project,
             Module.TSService.DeepLinks.project,

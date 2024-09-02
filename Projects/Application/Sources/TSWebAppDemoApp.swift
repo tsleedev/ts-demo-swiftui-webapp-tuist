@@ -6,6 +6,7 @@
 //  Copyright © 2024 https://github.com/tsleedev/. All rights reserved.
 //
 
+import TSCoreConfiguration
 import TSCoreUtilities
 import TSServiceCrashlytics
 import TSServiceDeepLinks
@@ -61,13 +62,15 @@ struct TSWebAppDemoApp: App {
     @ObservedObject private var coordinator: AppCoordinator
     
     init() {
+        let environmentConfiguration = EnvironmentConfiguration()
+        AppConfiguration.shared.configure(with: environmentConfiguration)
         FBAppConfig.configure()
         TSCrashlytics.crashlyticsLog(type: .app, log: "TSWebAppDemoApp_init")
         TSWebView.applictionNameForUserAgent = "TSWebAppDemo/\(AppInfo.version)"
         
         self.viewModel = AppViewModel(appClient: MockAppClient())
-        let url = ViewFactory.createWebStateForLocalHtml()
-        self.coordinator = AppCoordinator(.webView(url), isActive: .constant(false))
+//        self.viewModel = AppViewModel(appClient: AppClient())
+        self.coordinator = AppCoordinator(.webView(environmentConfiguration.webBaseURL), isActive: .constant(false))
         requestAuthNotification()
     }
     
@@ -77,7 +80,7 @@ struct TSWebAppDemoApp: App {
                 if viewModel.isInitialized {
                     FeatureMain.MainView(coordinator: coordinator)
                 }
-                if !(viewModel.isInitialized && viewModel.isAppActive) {
+                if !(viewModel.isInitialized && viewModel.isAppActive && viewModel.mainIsLoaded) {
                     SplashView()
                 }
                 if viewModel.shouldShowAlert {
@@ -89,6 +92,9 @@ struct TSWebAppDemoApp: App {
                                     viewModel.shouldShowAlert = $0
                                     if !$0 {
                                         viewModel.errorMessage = nil
+                                        Task {
+                                            await viewModel.fetchVersion()
+                                        }
                                     }
                                 }
                             ),

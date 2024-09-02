@@ -78,13 +78,3 @@ extension FeatureWebViewController {
         NotificationCenter.default.removeObserver(self, name: UIApplication.willEnterForegroundNotification, object: nil)
     }
 }
-
-//extension FeatureWebViewController: TSWebViewInteractionDelegate {
-//    func didReceiveMessage(webView: TSWebView, name: String, body: Any) {
-//        let selector = NSSelectorFromString(name + ":with:")
-//        let params = body as? [String: Any] ?? [:]
-//        if responds(to: selector) {
-//            perform(selector, with: webView, with: params)
-//        }
-//    }
-//}

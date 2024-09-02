@@ -9,8 +9,6 @@
 import Foundation
 import Moya
 
-public typealias SearchAPIService = APIService<SearchAPI>
-
 public final class APIService<Target: TargetType> {
     private let provider: MoyaProvider<Target> = MoyaProvider(
         session: {

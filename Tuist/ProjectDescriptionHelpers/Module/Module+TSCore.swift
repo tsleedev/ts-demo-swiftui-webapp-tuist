@@ -3,6 +3,7 @@ import ProjectDescription
 private let ProjectPath = "Projects/TSCore"
 public extension Module {
     enum TSCore: String, CaseIterable {
+        case Configuration
         case Logger
         case UIKitExtensions
         case Utilities

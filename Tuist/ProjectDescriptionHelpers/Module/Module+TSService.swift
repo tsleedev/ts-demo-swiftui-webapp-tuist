@@ -24,8 +24,13 @@ extension Module.TSService: Moduleable {
             dependencies = [
                 Module.ExternalBridges.Firebase.project,
             ]
-        case .Location, .Network:
+        case .Location:
             dependencies = [
+                Module.TSCore.Logger.project,
+            ]
+        case .Network:
+            dependencies = [
+                Module.TSCore.Configuration.project,
                 Module.TSCore.Logger.project,
                 External.Moya.dependency
             ]
